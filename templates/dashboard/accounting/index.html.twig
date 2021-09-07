@@ -1,0 +1,202 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}لیست تراکنش‌ها{% endblock %}
+
+{% block css %}
+    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/dt-global_style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+    <style>
+        label {
+            color: black!important;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
+                <div class="col-lg-12">
+                    <div class="widget-content searchable-container list">
+
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-5 col-md-5 col-sm-7 filtered-list-search layout-spacing align-self-center">
+                                <div>
+                                    <h4>لیست تراکنش‌ها</h4>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-8 col-lg-7 col-md-7 col-sm-5 text-sm-right text-center layout-spacing align-self-center">
+                                <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#newTrans">
+                                    تراکنش جدید
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="table-responsive mb-4 mt-4">
+                        <table id="dataTable" class="table table-hover" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>تاریح</th>
+                                <th> حساب</th>
+                                <th>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round"
+                                         class="feather feather-edit-2 edit">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                    </svg>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for t in transactions %}
+                                <tr>
+                                    <td>{{ t.date }}</td>
+                                    <td>{{ t.related }} {{ t.related_id }}</td>
+                                    <td>
+                                        {# <a href="{{ path('dashboard.customer.preview',{'customer':t.id}) }}" #}
+                                        {# class="btn btn-warning">مشاهده طرح درمان</a> #}
+                                        <a href="#" data-toggle="modal" data-target="#details_{{ t.id }}"
+                                           class="btn btn-primary">جزییات حساب</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% for t in transactions %}
+                        <div class="modal fade" id="details_{{ t.id }}" tabindex="-1" role="dialog"
+                             aria-labelledby="detailsModal_{{ t.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl " role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">جزییات حساب</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive mb-4 mt-4">
+                                            <table id="dataTable" class="table table-hover" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>تاریخ ایجاد</th>
+                                                    <th> تفصیل حساب</th>
+                                                    <th> توضیحات</th>
+                                                    <th> نوع تراکنش</th>
+                                                    <th> مبلغ</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for d in t.details %}
+                                                    <tr>
+                                                        <td>{{ d.date }}</td>
+                                                        <td>{{ d.related }}</td>
+                                                        <td>{{ d.description }}</td>
+                                                        <td>{{ d.type }}</td>
+                                                        <td>
+                                                            <script>separateDisplay({{ d.price }})</script>
+                                                            تومان
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-danger" data-dismiss="modal"><i class="flaticon-cancel-12"></i>
+                                            بازگشت
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="modal fade" id="newTrans" tabindex="-1" role="dialog" aria-labelledby="newTrans"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
+                            <div class="modal-content">
+                                <form action="{{ path('dashboard.accounting.new') }}" method="post">
+                                    <input type="hidden" name="isManual" value="true">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">حساب جدید</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="description">توضیحات</label>
+                                            <input class="form-control" type="text" name="description" id="description" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="price">مبلغ</label>
+                                            <input class="form-control" type="number" min="0" name="price" id="price" value="0" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="type">نوع</label>
+                                            <select class="form-control" name="type" id="type" required>
+                                                <option value="D">خرج</option>
+                                                <option value="C">درآمد</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="doctor">دکتر مربوطه</label>
+                                            <select class="form-control" name="doctor" id="doctor" required>
+                                                {% for doctor in doctors %}
+                                                    <option value="{{ doctor.id }}">{{ doctor.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="due_date">تاریخ</label>
+                                            <input type="text" id="due_date" name="due_date" required
+                                                   class="form-control" autocomplete="disabled">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal"> بازگشت</button>
+                                        <button type="submit" class="btn btn-primary"> ثبت</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/table/datatable/datatables.js') }}"></script>
+    <script src="{{ asset('assets/assets/js/custom_dataTable.js') }}"></script>
+    <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#due_date").pDatepicker({
+                initialValue: false,
+                calendar: {
+                    persian: {
+                        locale: 'fa'
+                    }
+                },
+                format: 'YYYY/MM/DD',
+                autoClose: true,
+                // responsive: true,
+                calendarSwitch: {
+                    enabled: false,
+                },
+                timePicker: {
+                    enabled: false,
+                }
+            });
+        });
+    </script>
+{% endblock %}

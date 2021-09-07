@@ -1,0 +1,35 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+.widget-content-area {
+  box-shadow: none !important; }
+
+#column-filter .badge {
+  background: transparent; }
+
+#column-filter .badge-primary {
+  color: #4031AD;
+  border: 2px dashed #4031AD; }
+
+#column-filter .badge-warning {
+  color: #e2a03f;
+  border: 2px dashed #e2a03f; }
+
+#column-filter .badge-danger {
+  color: #e7515a;
+  border: 2px dashed #e7515a; }
+
+.toggle-list a {
+  color: #fff !important;
+  background-color: #4031AD !important;
+  border-color: #4031AD;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  margin-left: 5px; }

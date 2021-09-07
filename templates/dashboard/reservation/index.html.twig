@@ -1,0 +1,210 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}نوبت‌دهی‌ها{% endblock %}
+
+{% block css %}
+    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/dt-global_style.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
+                <div class="col-lg-12">
+                    <div class="widget-content searchable-container list">
+
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-5 col-md-5 col-sm-7 filtered-list-search layout-spacing align-self-center">
+                                <div class="">
+                                    <h4>لیست نوبت‌دهی‌ها</h4>
+                                    {# <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> #}
+                                    {# <input type="text" class="form-control product-search" id="input-search" placeholder="جستجوی نوبت‌ها"> #}
+                                </div>
+                            </div>
+
+                            <div class="col-xl-8 col-lg-7 col-md-7 col-sm-5 text-sm-right text-center layout-spacing align-self-center">
+                                <div class="d-flex justify-content-sm-end justify-content-center">
+                                    <a class="btn btn-primary" type="button"
+                                       href="{{ path('dashboard.reservation.new') }}">نوبت جدید</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive mb-4 mt-4">
+                            <table id="dataTable" class="table table-hover" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>شماره رزرو</th>
+                                    <th> نام بیمار</th>
+                                    <th> دکتر</th>
+                                    <th>تلفن</th>
+                                    <th> تاریخ مراجعه</th>
+                                    <th> وضعیت</th>
+                                    <th> صورتحساب</th>
+                                    <th> پرداخت نشده</th>
+                                    <th>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-edit-2 edit">
+                                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                        </svg>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for app in appointments %}
+                                    <tr>
+                                        <td>{{ app.id }}</td>
+                                        <td>{{ app.customer }}</td>
+                                        <td>{{ app.doctor }}</td>
+                                        <td>{{ app.mobile }}</td>
+                                        <td>{{ app.due_date }}</td>
+                                        <td>
+                                            {% if app.status == 0 %}
+                                                <a href="{{ path('dashboard.reservation.change_state',{'app':app.id,'state':1}) }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                         viewBox="0 0 30 30">
+                                                        <g id="Component_85_157" data-name="Component 85 – 157">
+                                                            <g id="Ellipse_226" data-name="Ellipse 226" fill="white"
+                                                               stroke="#95989a" stroke-width="0.5">
+                                                                <circle cx="15" cy="15" r="15" stroke="none"/>
+                                                                <circle cx="15" cy="15" r="14.75" fill="none"/>
+                                                            </g>
+                                                        </g>
+                                                        <g id="tick" transform="translate(8.704 -57.621)">
+                                                            <g id="Group_50" data-name="Group 50"
+                                                               transform="translate(0 67.997)">
+                                                                <path id="Path_323" data-name="Path 323"
+                                                                      d="M12.408,68.182a.63.63,0,0,0-.89,0L3.974,75.725l-2.9-2.9a.63.63,0,0,0-.89.89l3.345,3.345a.63.63,0,0,0,.89,0l7.989-7.989A.63.63,0,0,0,12.408,68.182Z"
+                                                                      transform="translate(0 -67.997)" fill="black"/>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                </a>
+                                                <a href="{{ path('dashboard.reservation.change_state',{'app':app.id,'state':2}) }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                         viewBox="0 0 30 30">
+                                                        <g id="Component_85_158" data-name="Component 85 – 158">
+                                                            <g id="Ellipse_226" data-name="Ellipse 226" fill="white"
+                                                               stroke="#95989a" stroke-width="0.5">
+                                                                <circle cx="15" cy="15" r="15" stroke="none"/>
+                                                                <circle cx="15" cy="15" r="14.75" fill="none"/>
+                                                            </g>
+                                                        </g>
+                                                        <g id="cancel" transform="translate(9 8.999)">
+                                                            <g id="Group_51" data-name="Group 51"
+                                                               transform="translate(0 0.001)">
+                                                                <path id="Path_324" data-name="Path 324"
+                                                                      d="M6.663,6l5.2-5.2A.469.469,0,0,0,11.2.138L6,5.338.8.138A.469.469,0,1,0,.137.8L5.337,6l-5.2,5.2a.469.469,0,0,0,.663.663L6,6.664l5.2,5.2a.469.469,0,0,0,.663-.663Z"
+                                                                      transform="translate(0 -0.001)" fill="black"/>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                </a>
+                                            {% elseif app.status == 2 %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                     viewBox="0 0 30 30">
+                                                    <g id="Component_85_157" data-name="Component 85 – 157">
+                                                        <g id="Ellipse_226" data-name="Ellipse 226" fill="white"
+                                                           stroke="#95989a" stroke-width="0.5">
+                                                            <circle cx="15" cy="15" r="15" stroke="none"/>
+                                                            <circle cx="15" cy="15" r="14.75" fill="none"/>
+                                                        </g>
+                                                    </g>
+                                                    <g id="tick" transform="translate(8.704 -57.621)">
+                                                        <g id="Group_50" data-name="Group 50"
+                                                           transform="translate(0 67.997)">
+                                                            <path id="Path_323" data-name="Path 323"
+                                                                  d="M12.408,68.182a.63.63,0,0,0-.89,0L3.974,75.725l-2.9-2.9a.63.63,0,0,0-.89.89l3.345,3.345a.63.63,0,0,0,.89,0l7.989-7.989A.63.63,0,0,0,12.408,68.182Z"
+                                                                  transform="translate(0 -67.997)" fill="black"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                     viewBox="0 0 30 30">
+                                                    <g id="Component_85_158" data-name="Component 85 – 158">
+                                                        <g id="Ellipse_226" data-name="Ellipse 226" fill="red"
+                                                           stroke="#95989a" stroke-width="0.5">
+                                                            <circle cx="15" cy="15" r="15" stroke="none"/>
+                                                            <circle cx="15" cy="15" r="14.75" fill="none"/>
+                                                        </g>
+                                                    </g>
+                                                    <g id="cancel" transform="translate(9 8.999)">
+                                                        <g id="Group_51" data-name="Group 51"
+                                                           transform="translate(0 0.001)">
+                                                            <path id="Path_324" data-name="Path 324"
+                                                                  d="M6.663,6l5.2-5.2A.469.469,0,0,0,11.2.138L6,5.338.8.138A.469.469,0,1,0,.137.8L5.337,6l-5.2,5.2a.469.469,0,0,0,.663.663L6,6.664l5.2,5.2a.469.469,0,0,0,.663-.663Z"
+                                                                  transform="translate(0 -0.001)" fill="#fff"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            {% else %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                     viewBox="0 0 30 30">
+                                                    <g id="Component_85_157" data-name="Component 85 – 157">
+                                                        <g id="Ellipse_226" data-name="Ellipse 226" fill="#0bce56"
+                                                           stroke="#95989a" stroke-width="0.5">
+                                                            <circle cx="15" cy="15" r="15" stroke="none"/>
+                                                            <circle cx="15" cy="15" r="14.75" fill="none"/>
+                                                        </g>
+                                                    </g>
+                                                    <g id="tick" transform="translate(8.704 -57.621)">
+                                                        <g id="Group_50" data-name="Group 50"
+                                                           transform="translate(0 67.997)">
+                                                            <path id="Path_323" data-name="Path 323"
+                                                                  d="M12.408,68.182a.63.63,0,0,0-.89,0L3.974,75.725l-2.9-2.9a.63.63,0,0,0-.89.89l3.345,3.345a.63.63,0,0,0,.89,0l7.989-7.989A.63.63,0,0,0,12.408,68.182Z"
+                                                                  transform="translate(0 -67.997)" fill="white"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                     viewBox="0 0 30 30">
+                                                    <g id="Component_85_158" data-name="Component 85 – 158">
+                                                        <g id="Ellipse_226" data-name="Ellipse 226" fill="white"
+                                                           stroke="#95989a" stroke-width="0.5">
+                                                            <circle cx="15" cy="15" r="15" stroke="none"/>
+                                                            <circle cx="15" cy="15" r="14.75" fill="none"/>
+                                                        </g>
+                                                    </g>
+                                                    <g id="cancel" transform="translate(9 8.999)">
+                                                        <g id="Group_51" data-name="Group 51"
+                                                           transform="translate(0 0.001)">
+                                                            <path id="Path_324" data-name="Path 324"
+                                                                  d="M6.663,6l5.2-5.2A.469.469,0,0,0,11.2.138L6,5.338.8.138A.469.469,0,1,0,.137.8L5.337,6l-5.2,5.2a.469.469,0,0,0,.663.663L6,6.664l5.2,5.2a.469.469,0,0,0,.663-.663Z"
+                                                                  transform="translate(0 -0.001)" fill="black"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            {% endif %}
+
+
+                                        </td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td><a href="{{ path('dashboard.reservation.preview',{'app':app.id}) }}"
+                                               class="btn btn-warning">مشاهده</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/table/datatable/datatables.js') }}"></script>
+    <script src="{{ asset('assets/assets/js/custom_dataTable.js') }}"></script>
+{% endblock %}

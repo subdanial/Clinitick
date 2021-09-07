@@ -1,0 +1,660 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}مشاهده نوبت{% endblock %}
+
+{% block css %}
+    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ asset('assets/assets/css/apps/contacts.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/dt-global_style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/switches.css') }}">
+    <style>
+        label {
+            color: black!important;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
+                <div class="col-lg-12">
+                    <div class="widget-content">
+                        {% include 'dashboard/includes/treatment_modal.html.twig' %}
+
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="fname">نام</label>
+                                        <input class="form-control" type="text" name="fname" id="fname"
+                                               value="{{ customer.f_name }}" disabled>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="lname">نام خانوادگی</label>
+                                        <input class="form-control" type="text" name="lname" id="lname"
+                                               value="{{ customer.l_name }}" disabled>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="mobile">شماره موبایل</label>
+                                        <input class="form-control" type="number" name="mobile" id="mobile"
+                                               value="{{ customer.mobile }}" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <label for="reason">علت اصلی مراجعه</label>
+                                        <input class="form-control" type="text" name="reason" id="reason"
+                                               value="{{ customer.reason }}" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-12">
+                                        <h5>تاریخچه پزشکی</h5>
+                                    </div>
+                                </div>
+                                <section class="p-4">
+                                    <div class="row mt-3">
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="diabet"
+                                                       id="diabet" {% if customer.diabet %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="diabet">دیابت</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled type="checkbox" name="diabet"#}
+{#                                                   id="diabet" {% if customer.diabet %}checked{% endif %}>#}
+{#                                            <label class="form-check-label" for="diabet">دیابت</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="asm"
+                                                       id="asm" {% if customer.asm %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="asm">آسم</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.asm %}checked{% endif %} type="checkbox" name="asm"#}
+{#                                                   id="asm">#}
+{#                                            <label class="form-check-label" for="asm">آسم</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="hepatit"
+                                                       id="hepatit" {% if customer.hepatit %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="hepatit">هپاتیت</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.hepatit %}checked{% endif %} type="checkbox"#}
+{#                                                   name="hepatit"#}
+{#                                                   id="hepatit">#}
+{#                                            <label class="form-check-label" for="hepatit">هپاتیت</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="aids"
+                                                       id="aids" {% if customer.hepatit %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="aids">ایدز</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.aids %}checked{% endif %} type="checkbox" name="aids"#}
+{#                                                   id="aids">#}
+{#                                            <label class="form-check-label" for="aids">ایدز</label>#}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="kolie"
+                                                       id="kolie" {% if customer.kolie %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="kolie">بیماری کلیوی</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.kolie %}checked{% endif %} type="checkbox"#}
+{#                                                   name="kolie" id="kolie">#}
+{#                                            <label class="form-check-label" for="kolie">بیماری کلیوی</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="saar"
+                                                       id="saar" {% if customer.saar %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="saar">سرع</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.saar %}checked{% endif %} type="checkbox" name="saar"#}
+{#                                                   id="saar">#}
+{#                                            <label class="form-check-label" for="saar">صرع</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="etiad"
+                                                       id="etiad" {% if customer.etiad %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="etiad">اعتیاد</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.etiad %}checked{% endif %} type="checkbox"#}
+{#                                                   name="etiad" id="etiad">#}
+{#                                            <label class="form-check-label" for="etiad">اعتیاد</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="bardari"
+                                                       id="bardari" {% if customer.bardari %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="bardari">بارداری</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.bardari %}checked{% endif %} type="checkbox"#}
+{#                                                   name="bardari"#}
+{#                                                   id="bardari">#}
+{#                                            <label class="form-check-label" for="bardari">بارداری</label>#}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="romatism"
+                                                       id="romatism" {% if customer.romatism %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="romatism">سابقه تب
+                                                    روماتیسمی</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.romatism %}checked{% endif %} type="checkbox"#}
+{#                                                   name="romatism"#}
+{#                                                   id="romatism">#}
+{#                                            <label class="form-check-label" for="romatism">سابقه تب#}
+{#                                                روماتیسمی</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="shimi_darmani"
+                                                       id="shimi_darmani" {% if customer.shimiDarmani %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="shimi_darmani">شیمی درمانی/پرتو
+                                                    درمانی</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.shimiDarmani %}checked{% endif %} type="checkbox"#}
+{#                                                   name="shimi_darmani"#}
+{#                                                   id="shimi_darmani">#}
+{#                                            <label class="form-check-label" for="shimi_darmani">شیمی درمانی/پرتو#}
+{#                                                درمانی</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="eneghad"
+                                                       id="eneghad" {% if customer.eneghad %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="eneghad">بیماری انعقادی</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.eneghad %}checked{% endif %} type="checkbox"#}
+{#                                                   name="eneghad"#}
+{#                                                   id="eneghad">#}
+{#                                            <label class="form-check-label" for="eneghad">بیماری انعقادی</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="saratan"
+                                                       id="saratan" {% if customer.saratan %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="saratan">سرطان</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.saratan %}checked{% endif %} type="checkbox"#}
+{#                                                   name="saratan"#}
+{#                                                   id="saratan">#}
+{#                                            <label class="form-check-label" for="saratan">سرطان</label>#}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="ghalb"
+                                                       id="ghalb" {% if customer.ghalb %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="ghalb">بیماری قلبی عروقی</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.ghalb %}checked{% endif %} type="checkbox"#}
+{#                                                   name="ghalb" id="ghalb">#}
+{#                                            <label class="form-check-label" for="ghalb">بیماری قلبی عروقی</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="feshar_khun"
+                                                       id="feshar_khun" {% if customer.fesharKhun %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="feshar_khun">فشار خونی</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.fesharKhun %}checked{% endif %} type="checkbox"#}
+{#                                                   name="feshar_khun"#}
+{#                                                   id="feshar_khun">#}
+{#                                            <label class="form-check-label" for="feshar_khun">فشار خونی</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input" disabled type="checkbox" name="alergy"
+                                                       id="alergy" {% if customer.alergy %}checked{% endif %}>
+                                                <label class="custom-control-label m-auto" for="alergy">آلرژی(حساسیت)</label>
+                                            </div>
+{#                                            <input class="form-check-input" disabled#}
+{#                                                   {% if customer.alergy %}checked{% endif %} type="checkbox"#}
+{#                                                   name="alergy"#}
+{#                                                   id="alergy">#}
+{#                                            <label class="form-check-label" for="alergy">آلرژی(حساسیت)</label>#}
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <label for="description">توضیحات بیشتر</label>
+                                        <textarea class="form-control" name="description" disabled
+                                                  id="description">{{ customer.description }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-12">
+                                        <h5>طرح‌های درمان</h5>
+                                    </div>
+                                </div>
+                                <section class="p-4">
+                                    <div class="table-responsive mb-4 mt-4">
+                                        <table id="dataTable" class="table table-hover" style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>شماره دندان</th>
+                                                <th>طرح درمان</th>
+                                                <th> تاریخ مراجعه</th>
+                                                <th> مبلغ</th>
+                                                <th>باقی‌مانده پرداختی</th>
+                                                <th>عملیات</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for treat in appointment.treatments %}
+                                                <tr>
+                                                    <td>{{ treat.number }}</td>
+                                                    <td>{{ treat.name }}</td>
+                                                    <td>{{ treat.date }}</td>
+                                                    <td>
+                                                        <script>separateDisplay({{ treat.price }})</script>
+                                                        تومان
+                                                    </td>
+                                                    <td>
+                                                        <script>separateDisplay({{ treat.price }})</script>
+                                                        تومان
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#details_{{ treat.id }}">ایجاد پرداخت</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div id="fuMultipleFile" class="col-lg-12 layout-spacing">
+                                            <div class="statbox widget box box-shadow">
+                                                <div class="widget-content widget-content-area">
+                                                    <div class="custom-file-container" data-upload-id="mySecondImage">
+                                                        <label>بارگذاری عکس‌ها <a href="javascript:void(0)"
+                                                                                  class="btn btn-danger custom-file-container__image-clear"
+                                                                                  title="Clear Image">حذف تمامی
+                                                                عکس‌ها</a></label>
+                                                        <label class="custom-file-container__custom-file">
+                                                            <input type="file"
+                                                                   class="custom-file-container__custom-file__custom-file-input"
+                                                                   multiple>
+                                                            <input type="hidden" name="MAX_FILE_SIZE" value="10485760"/>
+                                                            <span class="custom-file-container__custom-file__custom-file-control"></span>
+                                                        </label>
+                                                        <div class="custom-file-container__image-preview"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 mt-2">
+                                        <a href="{{ path('dashboard.reservation.index') }}"
+                                           class="btn btn-danger w-100">بازگشت</a>
+                                    </div>
+                                    <div class="col-6 mt-2">
+                                        <button id="btn-add-treatment" type="button" class="btn btn-warning w-100"> طرح
+                                            درمان جدید
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for treat in appointment.treatments %}
+                        <div class="modal fade" id="details_{{ treat.id }}" tabindex="-1" role="dialog"
+                             aria-labelledby="detailsModal_{{ treat.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl " role="document">
+                                <div class="modal-content">
+                                    <form action="{{ path('dashboard.accounting.new') }}" method="post">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">ایجاد پرداخت</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" value="{{ treat.id }}" name="treatment">
+                                            <input type="hidden" value="{{ appointment.customer_id }}" name="customer">
+                                            <div class="form-group">
+                                                <label for="price">مبلغ</label>
+                                                <input class="form-control" type="number" min="0" max="{{ treat.price }}"
+                                                       name="price" id="price" value="{{ treat.price }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal"> بازگشت</button>
+                                            <button type="submit" class="btn btn-primary"> ثبت</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/table/datatable/datatables.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highlight/highlight.pack.js') }}"></script>
+    <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    <script>
+        $('#dataTable').DataTable({
+            "oLanguage": {
+                "oPaginate": {
+                    "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+                    "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
+                },
+                "sInfo": "صفحه _PAGE_ از _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "جستجو کنید...",
+                "sLengthMenu": "نتایج :  _MENU_",
+            },
+            "stripeClasses": [],
+            "lengthMenu": [10, 20, 50, 100],
+            "pageLength": 10
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#due_date").pDatepicker({
+                initialValue: false,
+                calendar: {
+                    persian: {
+                        locale: 'fa'
+                    }
+                },
+                format: 'YYYY/MM/DD',
+                maxDate: new persianDate().add('month', 1).valueOf(),
+                minDate: new persianDate().subtract('day', 0).valueOf(),
+                autoClose: true,
+                // responsive: true,
+                calendarSwitch: {
+                    enabled: false,
+                },
+                timePicker: {
+                    enabled: false,
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('#btn-add-treatment').on('click', function (event) {
+            $('#addTreatmentModal #btn-add').show();
+            $('#addTreatmentModal #btn-edit').hide();
+            $('#addTreatmentModal').modal('show');
+        })
+    </script>
+
+    <script>
+        var secondUpload = new FileUploadWithPreview('mySecondImage')
+
+        function changeTeethType(value) {
+            var adult_teeth = document.getElementById('adult_teeth');
+            var child_teeth = document.getElementById('child_teeth');
+            if (value === true) {
+                // teeth_element.innerHTML = '<option value="urA">بالا راست A</option><option value="urB">بالا راست B</option><option value="urC">بالا راست C</option><option value="urD">بالا راست D</option><option value="urE">بالا راست E</option><option value="ulA">بالا چپ A</option><option value="ulB">بالا چپ B</option><option value="ulC">بالا چپ C</option><option value="ulD">بالا چپ D</option><option value="ulE">بالا چپ E</option><option value="lrA">پایین راست A</option><option value="lrB">پایین راست B</option><option value="lrC">پایین راست C</option><option value="lrD">پایین راست D</option><option value="lrE">پایین راست E</option><option value="llA">پایین چپ A</option><option value="llB">پایین چپ B</option><option value="llC">پایین چپ C</option><option value="llD">پایین چپ D</option><option value="llE">پایین چپ E</option>';
+                adult_teeth.style.display = 'none';
+                child_teeth.style.display = 'inline-block';
+            } else {
+                // teeth_element.innerHTML = '<option value="ur1">بالا راست ۱</option><option value="ur2">بالا راست ۲</option><option value="ur3">بالا راست ۳</option><option value="ur4">بالا راست ۴</option><option value="ur5">بالا راست ۵</option><option value="ur6">بالا راست ۶</option><option value="ur7">بالا راست ۷</option><option value="ur8">بالا راست ۸</option><option value="ul1">بالا چپ ۱</option><option value="ul2">بالا چپ ۲</option><option value="ul3">بالا چپ ۳</option><option value="ul4">بالا چپ ۴</option><option value="ul5">بالا چپ ۵</option><option value="ul6">بالا چپ ۶</option><option value="ul7">بالا چپ ۷</option><option value="ul8">بالا چپ ۸</option><option value="lr1">پایین راست ۱</option><option value="lr2">پایین راست ۲</option><option value="lr3">پایین راست ۳</option><option value="lr4">پایین راست ۴</option><option value="lr5">پایین راست ۵</option><option value="lr6">پایین راست ۶</option><option value="lr7">پایین راست ۷</option><option value="lr8">پایین راست ۸</option><option value="ll1">پایین چپ ۱</option><option value="ll2">پایین چپ ۲</option><option value="ll3">پایین چپ ۳</option><option value="ll4">پایین چپ ۴</option><option value="ll5">پایین چپ ۵</option><option value="ll6">پایین چپ ۶</option><option value="ll7">پایین چپ ۷</option><option value="ll8">پایین چپ ۸</option>';
+                adult_teeth.style.display = 'inline-block';
+                child_teeth.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script>
+
+        teethArray = [
+            'ul1',
+            'ul2',
+            'ul3',
+            'ul4',
+            'ul5',
+            'ul6',
+            'ul7',
+            'ul8',
+            'll1',
+            'll2',
+            'll3',
+            'll4',
+            'll5',
+            'll6',
+            'll7',
+            'll8',
+            'ur1',
+            'ur2',
+            'ur3',
+            'ur4',
+            'ur5',
+            'ur6',
+            'ur7',
+            'ur8',
+            'lr1',
+            'lr2',
+            'lr3',
+            'lr4',
+            'lr5',
+            'lr6',
+            'lr7',
+            'lr8',
+            'ulA',
+            'ulB',
+            'ulC',
+            'ulD',
+            'ulE',
+            'llA',
+            'llB',
+            'llC',
+            'llD',
+            'llE',
+            'urA',
+            'urB',
+            'urC',
+            'urD',
+            'urE',
+            'lrA',
+            'lrB',
+            'lrC',
+            'lrD',
+            'lrE',
+        ]
+
+        function activateTeeth(teeth_number)
+        {
+            console.log(teeth_number)
+            document.getElementById('teeth').value = teeth_number
+
+            teethArray.forEach(function (teeth_no)
+            {
+                $('.tooth-' + teeth_no + '-parent').css('fill', 'white');
+                $('.tooth-' + teeth_no).css('fill', 'white');
+            })
+
+            $('.tooth-' + teeth_number + '-parent').css('fill', '#36DB96');
+            $('.tooth-' + teeth_number).css('fill', '#36DB96');
+        }
+    </script>
+
+    <script>
+        $('.tooth-ul1').click(function () {
+            activateTeeth('ul1')
+        });
+
+        $('.tooth-ul2').click(function () {
+            activateTeeth('ul2')
+        });
+
+        $('.tooth-ul3').click(function () {
+            activateTeeth('ul3')
+        });
+
+        $('.tooth-ul4').click(function () {
+            activateTeeth('ul4')
+        });
+
+        $('.tooth-ul5').click(function () {
+            activateTeeth('ul5')
+        });
+
+        $('.tooth-ul6').click(function () {
+            activateTeeth('ul6')
+        });
+
+        $('.tooth-ul7').click(function () {
+            activateTeeth('ul7')
+        });
+
+        $('.tooth-ul8').click(function () {
+            activateTeeth('ul8')
+        });
+
+        $('.tooth-ulA').click(function () {
+            activateTeeth('ulA')
+        });
+
+        $('.tooth-ulB').click(function () {
+            activateTeeth('ulB')
+        });
+
+        $('.tooth-ulC').click(function () {
+            activateTeeth('ulC')
+        });
+
+        $('.tooth-ulD').click(function () {
+            activateTeeth('ulD')
+        });
+
+        $('.tooth-ulE').click(function () {
+            activateTeeth('ulE')
+        });
+
+        /*Segundo Quadrante*/
+
+        $('.tooth-urA').click(function () {
+            activateTeeth('urA')
+        });
+
+        $('.tooth-urB').click(function () {
+            activateTeeth('urB')
+        });
+
+        $('.tooth-urC').click(function () {
+            activateTeeth('urC')
+        });
+
+        $('.tooth-urD').click(function () {
+            activateTeeth('urD')
+        });
+
+        $('.tooth-urE').click(function () {
+            activateTeeth('urE')
+        });
+
+        /*Terceiro Quadrante*/
+
+        $('.tooth-lrA').click(function () {
+            activateTeeth('lrA')
+        });
+
+        $('.tooth-lrB').click(function () {
+            activateTeeth('lrB')
+        });
+
+        $('.tooth-lrC').click(function () {
+            activateTeeth('lrC')
+        });
+
+        $('.tooth-lrD').click(function () {
+            activateTeeth('lrD')
+        });
+
+        $('.tooth-lrE').click(function () {
+            activateTeeth('lrE')
+        });
+
+        /*Quarto Quadrante*/
+
+        $('.tooth-llA').click(function () {
+            activateTeeth('llA')
+        });
+
+        $('.tooth-llB').click(function () {
+            activateTeeth('llB')
+        });
+
+        $('.tooth-llC').click(function () {
+            activateTeeth('llC')
+        });
+
+        $('.tooth-llD').click(function () {
+            activateTeeth('llD')
+        });
+
+        $('.tooth-llE').click(function () {
+            activateTeeth('llE')
+        });
+    </script>
+
+    <script !src="">
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+
+
+        function setRandomColor() {
+            $("#colorpad").css("background-color", getRandomColor());
+        }
+    </script>
+{% endblock %}
+

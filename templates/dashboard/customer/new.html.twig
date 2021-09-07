@@ -1,0 +1,188 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}بیمار جدید{% endblock %}
+
+{% block css %}
+    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet"
+          type="text/css"/>
+{% endblock %}
+
+{% block body %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
+                <div class="col-lg-12">
+                    <div class="widget-content">
+                        <form action="{{ path('dashboard.customer.new') }}" method="post">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label for="fname">نام</label>
+                                            <input class="form-control" type="text" name="fname" id="fname">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="lname">نام خانوادگی</label>
+                                            <input class="form-control" type="text" name="lname" id="lname">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="mobile">شماره موبایل</label>
+                                            <input class="form-control" type="text" name="mobile" id="mobile" placeholder="مثال: 09123456789">
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-lg-6 col-12">
+                                            <label for="reason">بیمار برای دکتر</label>
+                                            <select name="doctor" id="doctor" class="form-control">
+                                                {% for doctor in doctors %}
+                                                    <option value="{{ doctor.id }}">{{ doctor.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label for="reason">علت اصلی مراجعه</label>
+                                            <input class="form-control" type="text" name="reason" id="reason">
+                                        </div>
+                                    </div>
+                                    <div class="row mt-5">
+                                        <div class="col-12">
+                                            <h5>تاریخچه پزشکی</h5>
+                                        </div>
+                                    </div>
+                                    <section class="p-4">
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="diabet"
+                                                       id="diabet">
+                                                <label class="form-check-label" for="diabet">دیابت</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="asm" id="asm">
+                                                <label class="form-check-label" for="asm">آسم</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="hepatit"
+                                                       id="hepatit">
+                                                <label class="form-check-label" for="hepatit">هپاتیت</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="aids" id="aids">
+                                                <label class="form-check-label" for="aids">ایدز</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="kolie" id="kolie">
+                                                <label class="form-check-label" for="kolie">بیماری کلیوی</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="saar" id="saar">
+                                                <label class="form-check-label" for="saar">صرع</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="etiad" id="etiad">
+                                                <label class="form-check-label" for="etiad">اعتیاد</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="bardari"
+                                                       id="bardari">
+                                                <label class="form-check-label" for="bardari">بارداری</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="romatism"
+                                                       id="romatism">
+                                                <label class="form-check-label" for="romatism">سابقه تب
+                                                    روماتیسمی</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="shimi_darmani"
+                                                       id="shimi_darmani">
+                                                <label class="form-check-label" for="shimi_darmani">شیمی درمانی/پرتو
+                                                    درمانی</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="eneghad"
+                                                       id="eneghad">
+                                                <label class="form-check-label" for="eneghad">بیماری انعقادی</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="saratan"
+                                                       id="saratan">
+                                                <label class="form-check-label" for="saratan">سرطان</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="ghalb" id="ghalb">
+                                                <label class="form-check-label" for="ghalb">بیماری قلبی عروقی</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="feshar_khun"
+                                                       id="feshar_khun">
+                                                <label class="form-check-label" for="feshar_khun">فشار خونی</label>
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-check-input" type="checkbox" name="alergy"
+                                                       id="alergy">
+                                                <label class="form-check-label" for="alergy">آلرژی(حساسیت)</label>
+                                            </div>
+                                            <div class="col-3">
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <label for="description">توضیحات بیشتر</label>
+                                            <textarea class="form-control" name="description"
+                                                      id="description"></textarea>
+                                        </div>
+                                        <div class="col-12 mt-2">
+                                            <button class="btn btn-primary w-100" type="submit">ثبت بیمار جدید</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div id="fuMultipleFile" class="col-lg-12 layout-spacing">
+                                        <div class="statbox widget box box-shadow">
+                                            <div class="widget-content widget-content-area">
+                                                <div class="custom-file-container" data-upload-id="mySecondImage">
+                                                    <label>بارگذاری عکس‌ها <a href="javascript:void(0)"
+                                                                              class="btn btn-danger custom-file-container__image-clear"
+                                                                              title="Clear Image">حذف تمامی
+                                                            عکس‌ها</a></label>
+                                                    <label class="custom-file-container__custom-file">
+                                                        <input type="file"
+                                                               class="custom-file-container__custom-file__custom-file-input"
+                                                               multiple>
+                                                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760"/>
+                                                        <span class="custom-file-container__custom-file__custom-file-control"></span>
+                                                    </label>
+                                                    <div class="custom-file-container__image-preview"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
+
+    <script>
+        var secondUpload = new FileUploadWithPreview('mySecondImage')
+    </script>
+{% endblock %}

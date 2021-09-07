@@ -1,0 +1,260 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}نوبت‌دهی جدید{% endblock %}
+
+{% block css %}
+    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+{% endblock %}
+
+{% block body %}
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
+                <div class="col-lg-12">
+                    <div class="widget-content">
+                        <form action="{{ path('dashboard.reservation.new') }}" method="post">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="customer">بیمار</label>
+                                    <select  class="form-control required-class" name="customer" id="customer-select" required>
+                                        {% if customers|length == 1 %}
+                                            {% for customer in customers %}
+                                                <option selected value="{{ customer.id }}">{{ customer.name }}</option>
+                                            {% endfor %}
+                                            {% else %}
+                                                <option value="-">-</option>
+                                                {% for customer in customers %}
+                                                    <option value="{{ customer.id }}">{{ customer.name }}</option>
+                                                {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label for="doctor">دکتر</label>
+                                    <select class="form-control" name="doctor" required id="doctor" onchange="getDoctorDays(this.value)">
+                                        <option value="-">-</option>
+                                        {% for doctor in doctors %}
+                                            <option value="{{ doctor.id }}">{{ doctor.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-4"></div>
+                            </div>
+                            <div class="row mt-4" id="appointment_days">
+
+                            </div>
+                            <div class="mt-4" id="appointment_times">
+
+                            </div>
+                            <div class="mt-4" id="treatment" style="display: none">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="contact-name text-right">
+                                            <input type="checkbox" id="is_child" name="is_child"
+                                                   class="form-check-input" onchange="changeTeethType(this.checked)">
+                                            <label class="form-check-label" for="is_child">کودک است</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="contact-name">
+                                            <label for="teeth">دندان منتخب</label>
+                                            <select class="form-control" name="teeth" id="teeth">
+                                                <option value="ur1">بالا راست ۱</option>
+                                                <option value="ur2">بالا راست ۲</option>
+                                                <option value="ur3">بالا راست ۳</option>
+                                                <option value="ur4">بالا راست ۴</option>
+                                                <option value="ur5">بالا راست ۵</option>
+                                                <option value="ur6">بالا راست ۶</option>
+                                                <option value="ur7">بالا راست ۷</option>
+                                                <option value="ur8">بالا راست ۸</option>
+                                                <option value="ul1">بالا چپ ۱</option>
+                                                <option value="ul2">بالا چپ ۲</option>
+                                                <option value="ul3">بالا چپ ۳</option>
+                                                <option value="ul4">بالا چپ ۴</option>
+                                                <option value="ul5">بالا چپ ۵</option>
+                                                <option value="ul6">بالا چپ ۶</option>
+                                                <option value="ul7">بالا چپ ۷</option>
+                                                <option value="ul8">بالا چپ ۸</option>
+                                                <option value="lr1">پایین راست ۱</option>
+                                                <option value="lr2">پایین راست ۲</option>
+                                                <option value="lr3">پایین راست ۳</option>
+                                                <option value="lr4">پایین راست ۴</option>
+                                                <option value="lr5">پایین راست ۵</option>
+                                                <option value="lr6">پایین راست ۶</option>
+                                                <option value="lr7">پایین راست ۷</option>
+                                                <option value="lr8">پایین راست ۸</option>
+                                                <option value="ll1">پایین چپ ۱</option>
+                                                <option value="ll2">پایین چپ ۲</option>
+                                                <option value="ll3">پایین چپ ۳</option>
+                                                <option value="ll4">پایین چپ ۴</option>
+                                                <option value="ll5">پایین چپ ۵</option>
+                                                <option value="ll6">پایین چپ ۶</option>
+                                                <option value="ll7">پایین چپ ۷</option>
+                                                <option value="ll8">پایین چپ ۸</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <div class="contact-name">
+                                            <label for="plan_name">درمان</label>
+                                            <input type="text" id="plan_name" name="plan_name"
+                                                   class="form-control" placeholder="مثال: ایمپلنت">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <div class="contact-name">
+                                            <label for="due_date">تاریخ مراجعه</label>
+                                            <input type="text" id="due_date" name="due_date"
+                                                   class="form-control" autocomplete="disabled">
+                                            <span class="validation-text"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <div class="contact-name">
+                                            <label for="price">مبلغ</label>
+                                            <input type="number" id="price" name="price"
+                                                   class="form-control" placeholder="تومان">
+                                            <span class="validation-text"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <input type="hidden" id="date_input" name="date_input">
+                                    <input type="hidden" id="from_time_input" name="from_time_input">
+                                    <button class="btn btn-primary">ثبت نوبت جدید</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/select2/custom-select2.js') }}"></script>
+    <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+
+    <script>
+        var ss = $(".select2-custom").select2({
+            tags: true,
+        });
+
+        function getDoctorDays(doctor)
+        {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var Response = JSON.parse(this.responseText);
+                    var query = ''
+                    Response['data'].forEach(function (data) {
+                        var query = '<div class="flex-column text-center" style="width: '+100/(Response['data'].length)+'%"><button class="btn btn-secondary w-75" id="day_btn_'+data['id']+'" onclick="getTimes('+data['id']+')" type="button" style="font-weight: bold;font-size: 15px;">'+data['day_of_week']+'</button></div>'
+
+                        document.getElementById('appointment_days').insertAdjacentHTML('beforeend', query);
+                    })
+                } else {
+                    console.log('Error')
+                }
+            };
+
+            var queryString = "d=" + doctor;
+            xhttp.open("GET", '{{ path('dashboard.reservation.get_doctor_days_ajax') }}' + '?' + queryString, true);
+            xhttp.send();
+        }
+
+        function getTimes(day) {
+            var section = document.getElementById('appointment_times');
+            section.style.opacity = '1';
+            section.style.transition = 'opacity 0.5s linear 0s';
+            section.innerHTML = '';
+            var btn = document.getElementById('day_btn_' + day);
+
+            // for (var i = 1; i <= 7; i++) {
+            //     var btn_remove = document.getElementById('day_btn_' + i);
+            //     btn_remove.classList.remove('btn-primary');
+            // }
+            // btn.classList.add('btn-primary');
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var Response = JSON.parse(this.responseText);
+                    Response['data'].forEach(function (data) {
+                        var times = ''
+                        data['times'].forEach(function (d) {
+                            times += '<button onclick="setDateTime(`'+data['date']+'`,'+d['from_time']+', this)" class="btn btn-app-time" type="button" style="margin: 1px; border: solid 1px black;font-weight: bold; font-size: 15px;">' + d['from_time'] + ' - ' + d['to_time'] + '</button>'
+                        })
+                        var row = '<div class="row mt-1"><div class="col-4"><span class="badge badge-info">' + data['day'] + '</span></div><div class="col-8 flex-column">' + times + '</div></div>'
+
+                        section.insertAdjacentHTML('beforeend', row);
+                    })
+                } else {
+                    console.log('Error')
+                }
+            };
+
+            var queryString = "d=" + day;
+            xhttp.open("GET", '{{ path('dashboard.reservation.get_time_ajax') }}' + '?' + queryString, true);
+            xhttp.send();
+        }
+
+        function setDateTime(date, from_time, element)
+        {
+            for (let item of document.getElementsByClassName('btn-app-time')) {
+                item.classList.remove('btn-primary');
+            }
+
+            element.classList.add('btn-primary');
+            document.getElementById('date_input').value = date;
+            document.getElementById('from_time_input').value = from_time
+            document.getElementById('treatment').style.display = 'block'
+        }
+
+        function changeTeethType(value)
+        {
+            var teeth_element = document.getElementById('teeth');
+            if(value === true)
+            {
+                teeth_element.innerHTML = '<option value="urA">بالا راست A</option><option value="urB">بالا راست B</option><option value="urC">بالا راست C</option><option value="urD">بالا راست D</option><option value="urE">بالا راست E</option><option value="ulA">بالا چپ A</option><option value="ulB">بالا چپ B</option><option value="ulC">بالا چپ C</option><option value="ulD">بالا چپ D</option><option value="ulE">بالا چپ E</option><option value="lrA">پایین راست A</option><option value="lrB">پایین راست B</option><option value="lrC">پایین راست C</option><option value="lrD">پایین راست D</option><option value="lrE">پایین راست E</option><option value="llA">پایین چپ A</option><option value="llB">پایین چپ B</option><option value="llC">پایین چپ C</option><option value="llD">پایین چپ D</option><option value="llE">پایین چپ E</option>';
+            } else {
+                teeth_element.innerHTML = '<option value="ur1">بالا راست ۱</option><option value="ur2">بالا راست ۲</option><option value="ur3">بالا راست ۳</option><option value="ur4">بالا راست ۴</option><option value="ur5">بالا راست ۵</option><option value="ur6">بالا راست ۶</option><option value="ur7">بالا راست ۷</option><option value="ur8">بالا راست ۸</option><option value="ul1">بالا چپ ۱</option><option value="ul2">بالا چپ ۲</option><option value="ul3">بالا چپ ۳</option><option value="ul4">بالا چپ ۴</option><option value="ul5">بالا چپ ۵</option><option value="ul6">بالا چپ ۶</option><option value="ul7">بالا چپ ۷</option><option value="ul8">بالا چپ ۸</option><option value="lr1">پایین راست ۱</option><option value="lr2">پایین راست ۲</option><option value="lr3">پایین راست ۳</option><option value="lr4">پایین راست ۴</option><option value="lr5">پایین راست ۵</option><option value="lr6">پایین راست ۶</option><option value="lr7">پایین راست ۷</option><option value="lr8">پایین راست ۸</option><option value="ll1">پایین چپ ۱</option><option value="ll2">پایین چپ ۲</option><option value="ll3">پایین چپ ۳</option><option value="ll4">پایین چپ ۴</option><option value="ll5">پایین چپ ۵</option><option value="ll6">پایین چپ ۶</option><option value="ll7">پایین چپ ۷</option><option value="ll8">پایین چپ ۸</option>';
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#due_date").pDatepicker({
+                initialValue: false,
+                calendar: {
+                    persian: {
+                        locale: 'fa'
+                    }
+                },
+                format: 'YYYY/MM/DD',
+                maxDate: new persianDate().add('month', 1).valueOf(),
+                minDate: new persianDate().subtract('day', 0).valueOf(),
+                autoClose: true,
+                // responsive: true,
+                calendarSwitch: {
+                    enabled: false,
+                },
+                timePicker: {
+                    enabled: false,
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% for label, messages in app.flashes %}
+    {% if label == 'error' %}{% set label = 'danger' %}{% endif %}
+    {% for message in messages %}
+        <div class="infobox-1 infobox-{{ label }}">
+            {# <div class="info-icon"> #}
+            {# <svg> ...</svg> #}
+            {# </div> #}
+
+            <h5 style="display: inline-block; color: white">
+                {% if label == 'danger' %}خطا
+                {% elseif label == 'success' %}موفقیت‌آمیز
+                {% else %}خبر
+                {% endif %}
+            </h5>
+            <span class="float-right">
+            <a href="#" onclick="removeFlash()">X</a>
+        </span>
+            <h5 class="info-heading">
+
+            </h5>
+            <p class="info-text">{{ message }}</p>
+        </div>
+    {% endfor %}
+{% endfor %}

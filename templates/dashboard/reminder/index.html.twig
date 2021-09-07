@@ -1,0 +1,438 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}یادآوری‌ها{% endblock %}
+
+{% block css %}
+    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/assets/css/apps/contacts.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+{% endblock %}
+
+{% block body %}
+    <div id="content" class="main-content content-reminder-sidebar">
+        <div class="layout-px-spacing">
+            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
+                <div class="col-lg-12">
+                    <div class="widget-content searchable-container list">
+
+                        <div class="row">
+                            <div class="col-6 layout-spacing align-self-center">
+                                <h4>{{ active_list }}</h4>
+                            </div>
+
+                            <div class="col-6 text-sm-right text-center layout-spacing align-self-center">
+                                <div class="d-flex justify-content-sm-end justify-content-center">
+                                    <button id="btn-add-reminder" class="btn btn-primary" type="button">یادداشت جدید
+                                    </button>
+                                </div>
+
+                                <div class="modal fade" id="addReminderModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="addReminderModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <form id="addReminderModalTitle"
+                                                  action="{{ path('dashboard.reminder.new') }}" method="post">
+                                                <div class="modal-body">
+                                                    <i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
+                                                    <div class="add-contact-box">
+                                                        <div class="add-contact-content">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <select name="reminder_list" id="reminder_list"
+                                                                            class="form-control">
+                                                                        <option value="-" selected>انتخاب لیست</option>
+                                                                        {% for reminder_list in reminder_lists %}
+                                                                            <option value="{{ reminder_list.id }}">{{ reminder_list.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="contact-name">
+                                                                        <input type="text" id="description"
+                                                                               name="description" class="form-control"
+                                                                               placeholder="یادداشت">
+                                                                        <span class="validation-text"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="contact-name">
+                                                                        <input type="text" id="due_date" name="due_date"
+                                                                               class="form-control"
+                                                                               placeholder="تاریخ">
+                                                                        <span class="validation-text"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="contact-name text-right">
+                                                                        <input type="checkbox" id="important"
+                                                                               name="important"
+                                                                               class="form-check-input"
+                                                                               placeholder="تاریخ">
+                                                                        <label class="form-check-label" for="important">مهم
+                                                                            است</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button id="btn-edit" type="submit" class="float-left btn">ویرایش
+                                                    </button>
+
+                                                    <button class="btn" type="button" data-dismiss="modal"><i
+                                                                class="flaticon-delete-1"></i> بازگشت
+                                                    </button>
+
+                                                    <button id="btn-add" type="submit" class="btn">افزودن</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="addReminderListModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="addReminderModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <form id="addReminderModalTitle"
+                                                  action="{{ path('dashboard.reminder.new.list') }}" method="post">
+                                                <div class="modal-body">
+                                                    <i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
+                                                    <div class="add-contact-box">
+                                                        <div class="add-contact-content">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="contact-name">
+                                                                        <input type="text" id="name"
+                                                                               name="name" class="form-control"
+                                                                               placeholder="نام لیست">
+                                                                        <span class="validation-text"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button id="btn-edit" type="submit" class="float-left btn">ویرایش
+                                                    </button>
+
+                                                    <button class="btn" type="button" data-dismiss="modal"><i
+                                                                class="flaticon-delete-1"></i> بازگشت
+                                                    </button>
+
+                                                    <button id="btn-add" type="submit" class="btn">افزودن</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="searchable-items list">
+                            {% for reminder in reminders %}
+                                <div class="items {% if reminder.due_date %}due{% endif %} {% if reminder.is_today %}today{% endif %} {% if reminder.important %}important{% endif %}">
+                                    <div class="item-content">
+                                        <div class="user-profile">
+                                            <div class="n-chk align-self-center text-center">
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input type="checkbox" class="custom-control-input" id="reminder_check_{{ reminder.id }}"
+                                                           onchange="changeReminderState({{ reminder.id }}, this.checked)"
+                                                           {% if reminder.done %}checked disabled{% endif %}>
+                                                    <label class="custom-control-label" for="reminder_check_{{ reminder.id }}"></label>
+                                                </div>
+{#                                                <label class="new-control new-checkbox checkbox-primary">#}
+{#                                                    <input id="reminder_check_{{ reminder.id }}" type="checkbox"#}
+{#                                                           class="new-control-input contact-chkbox"#}
+{#                                                           onchange="changeReminderState({{ reminder.id }}, this.checked)"#}
+{#                                                           {% if reminder.done %}checked disabled{% endif %}>#}
+{#                                                    <span class="new-control-indicator"></span>#}
+{#                                                </label>#}
+                                            </div>
+                                            <div class="user-meta-info ml-2" style="margin: auto">
+                                                <div class="user-meta-info">
+                                                    <p class="user-name" {% if reminder.done %}style="text-decoration: line-through;"{% endif %}>{{ reminder.description }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="action-btn">
+                                            {% if reminder.due_date %}
+                                                <span>{{ reminder.due_date }}</span>
+                                            {% endif %}
+                                            <svg class="m-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                 viewBox="0 0 29.25 29.25">
+                                                <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
+                                                      d="M18,3.375A14.625,14.625,0,1,0,32.625,18,14.623,14.623,0,0,0,18,3.375Zm.984,15.891A.987.987,0,0,1,18,20.25H11.25a.984.984,0,0,1,0-1.969h5.766V9a.984.984,0,0,1,1.969,0Z"
+                                                      transform="translate(-3.375 -3.375)"
+                                                      fill="{% if reminder.due_date %}#36db96{% else %}#3B4451{% endif %}"/>
+                                            </svg>
+                                            <svg class="m-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                 viewBox="0 0 35.438 36">
+                                                <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
+                                                      d="M24.579,6.946C20.811,6.946,17.7,4.5,12.962,4.5a13.666,13.666,0,0,0-4.784.845A3.938,3.938,0,1,0,2.25,7.168V34.313A1.687,1.687,0,0,0,3.938,36H5.063A1.687,1.687,0,0,0,6.75,34.313V27.675A19.645,19.645,0,0,1,14.8,26.12c3.768,0,6.88,2.446,11.617,2.446a14.72,14.72,0,0,0,8.614-2.873A2.246,2.246,0,0,0,36,23.839V6.746a2.25,2.25,0,0,0-3.2-2.04,20.471,20.471,0,0,1-8.223,2.24Z"
+                                                      transform="translate(-0.563 0)"
+                                                      fill="{% if reminder.important %}#ff8900{% else %}#3B4451{% endif %}"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="reminder-section">
+        <div class="reminder-section-content">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card" onclick="activateDataType(this)" id="card-important" data-label-type="important">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35.438" height="36"
+                                         viewBox="0 0 35.438 36">
+                                        <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
+                                              d="M24.579,6.946C20.811,6.946,17.7,4.5,12.962,4.5a13.666,13.666,0,0,0-4.784.845A3.938,3.938,0,1,0,2.25,7.168V34.313A1.687,1.687,0,0,0,3.938,36H5.063A1.687,1.687,0,0,0,6.75,34.313V27.675A19.645,19.645,0,0,1,14.8,26.12c3.768,0,6.88,2.446,11.617,2.446a14.72,14.72,0,0,0,8.614-2.873A2.246,2.246,0,0,0,36,23.839V6.746a2.25,2.25,0,0,0-3.2-2.04,20.471,20.471,0,0,1-8.223,2.24Z"
+                                              transform="translate(-0.563 0)" fill="#ff8900"/>
+                                    </svg>
+                                </div>
+                                <div class="col-3">
+                                    <span>{{ important_count }}</span>
+                                </div>
+                            </div>
+                            <br>
+                            <span class="pr-2">کارهای مهم</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card" onclick="activateDataType(this)" id="card-today" data-label-type="today">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="30" viewBox="0 0 27 30">
+                                        <path id="Icon_material-today" data-name="Icon material-today"
+                                              d="M28.5,4.5H27v-3H24v3H12v-3H9v3H7.5a2.986,2.986,0,0,0-2.985,3L4.5,28.5a3,3,0,0,0,3,3h21a3.009,3.009,0,0,0,3-3V7.5A3.009,3.009,0,0,0,28.5,4.5Zm0,24H7.5V12h21ZM10.5,15H18v7.5H10.5Z"
+                                              transform="translate(-4.5 -1.5)" fill="#009dff"/>
+                                    </svg>
+                                </div>
+                                <div class="col-3">
+                                    <span>{{ today_count }}</span>
+                                </div>
+                            </div>
+                            <br>
+                            <span class="pr-2">امروز </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6">
+                    <div class="card" onclick="activateDataType(this)" id="card-due" data-label-type="due">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="29.25" height="29.25"
+                                         viewBox="0 0 29.25 29.25">
+                                        <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
+                                              d="M18,3.375A14.625,14.625,0,1,0,32.625,18,14.623,14.623,0,0,0,18,3.375Zm.984,15.891A.987.987,0,0,1,18,20.25H11.25a.984.984,0,0,1,0-1.969h5.766V9a.984.984,0,0,1,1.969,0Z"
+                                              transform="translate(-3.375 -3.375)" fill="#36db96"/>
+                                    </svg>
+                                </div>
+                                <div class="col-3">
+                                    <span>{{ due_count }}</span>
+                                </div>
+                            </div>
+                            <br>
+                            <span class="pr-2">زمان‌بندی شده</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card" onclick="activateDataType(this)" id="card-all" data-label-type="all">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="29.25" height="27.001"
+                                         viewBox="0 0 29.25 27.001">
+                                        <g id="Icon_ionic-ios-wallet" data-name="Icon ionic-ios-wallet"
+                                           transform="translate(-3.375 -4.499)">
+                                            <path id="Path_381" data-name="Path 381"
+                                                  d="M28.406,11.25H7.594a4.222,4.222,0,0,0-4.219,4.219V27.281A4.222,4.222,0,0,0,7.594,31.5H28.406a4.222,4.222,0,0,0,4.219-4.219V15.469A4.222,4.222,0,0,0,28.406,11.25Z"
+                                                  fill="#fff"/>
+                                            <path id="Path_382" data-name="Path 382"
+                                                  d="M24.11,4.57,7.594,7.8C6.328,8.079,4.5,9.352,4.5,10.9A4.43,4.43,0,0,1,7.945,9.563h20.18V8.121a4.037,4.037,0,0,0-.977-2.644h0A3.325,3.325,0,0,0,24.11,4.57Z"
+                                                  fill="#fff"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="col-3">
+                                    <span>{{ reminders | length }}</span>
+                                </div>
+                            </div>
+                            <br>
+                            <span class="pr-2">تمام کارها</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="mt-5 my-reminder-list">
+                <h5 style="color: #36DB96">لیست‌های من
+                    <a class="clinitick-custom-link-sm clinitick-custom-link" href="javascript:void(0)" id="btn-add-reminder-list">+</a>
+                </h5>
+                <div class="row">
+                    <div class="col-12 p-0">
+                        <div class="card">
+                            <div class="card-body">
+                                {% for reminder_list in reminder_lists %}
+                                    <a class="row" href="{{ path('dashboard.reminder.index',{'fetchList':reminder_list.id}) }}">
+                                        <div class="col-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48"
+                                                 viewBox="0 0 48 48">
+                                                <defs>
+                                                    <filter id="Ellipse_262" x="0" y="0" width="48" height="48"
+                                                            filterUnits="userSpaceOnUse">
+                                                        <feOffset dy="3" input="SourceAlpha"/>
+                                                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                                                        <feFlood flood-opacity="0.161"/>
+                                                        <feComposite operator="in" in2="blur"/>
+                                                        <feComposite in="SourceGraphic"/>
+                                                    </filter>
+                                                </defs>
+                                                <g id="Group_91" data-name="Group 91" transform="translate(-310 -550)">
+                                                    <g transform="matrix(1, 0, 0, 1, 310, 550)" filter="url(#Ellipse_262)">
+                                                        <circle id="Ellipse_262-2" data-name="Ellipse 262" cx="15" cy="15"
+                                                                r="15" transform="translate(9 6)" fill="#4031ad"/>
+                                                    </g>
+                                                    <path id="Icon_awesome-list-ul" data-name="Icon awesome-list-ul"
+                                                          d="M1.575,3.375A1.575,1.575,0,1,0,3.15,4.95,1.575,1.575,0,0,0,1.575,3.375Zm0,5.25A1.575,1.575,0,1,0,3.15,10.2,1.575,1.575,0,0,0,1.575,8.625Zm0,5.25A1.575,1.575,0,1,0,3.15,15.45a1.575,1.575,0,0,0-1.575-1.575Zm14.7.525H5.775a.525.525,0,0,0-.525.525v1.05a.525.525,0,0,0,.525.525h10.5a.525.525,0,0,0,.525-.525v-1.05A.525.525,0,0,0,16.275,14.4Zm0-10.5H5.775a.525.525,0,0,0-.525.525v1.05A.525.525,0,0,0,5.775,6h10.5a.525.525,0,0,0,.525-.525V4.425A.525.525,0,0,0,16.275,3.9Zm0,5.25H5.775a.525.525,0,0,0-.525.525v1.05a.525.525,0,0,0,.525.525h10.5a.525.525,0,0,0,.525-.525V9.675A.525.525,0,0,0,16.275,9.15Z"
+                                                          transform="translate(342.4 582.025) rotate(180)" fill="#fff"/>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <div class="col-8 vertical-align-center">
+                                            <span>{{ reminder_list.name }}</span>
+                                        </div>
+                                        <div class="col-2 vertical-align-center">
+                                            <span>{{ reminder_list.cnt }}</span>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    {# <script src="{{ asset('assets/assets/js/apps/contact.js') }}"></script> #}
+    <script>
+        $('#btn-add-reminder').on('click', function (event) {
+            $('#addReminderModal #btn-add').show();
+            $('#addReminderModal #btn-edit').hide();
+            $('#addReminderModal').modal('show');
+        })
+        $('#btn-add-reminder-list').on('click', function (event) {
+            $('#addReminderListModal #btn-add').show();
+            $('#addReminderListModal #btn-edit').hide();
+            $('#addReminderListModal').modal('show');
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#due_date").pDatepicker({
+                initialValue: false,
+                calendar: {
+                    persian: {
+                        locale: 'fa'
+                    }
+                },
+                format: 'YYYY/MM/DD',
+                maxDate: new persianDate().add('month', 1).valueOf(),
+                minDate: new persianDate().subtract('day', 0).valueOf(),
+                autoClose: true,
+                // responsive: true,
+                calendarSwitch: {
+                    enabled: false,
+                },
+                timePicker: {
+                    enabled: false,
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function changeReminderState(id, value) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var Response = JSON.parse(this.responseText);
+                } else {
+                    console.log('Error')
+                }
+            };
+
+            var queryString = "rid=" + id + "&val=" + value;
+            xhttp.open("GET", '{{ path('dashboard.reminder.change_state') }}' + '?' + queryString, true);
+            xhttp.send();
+        }
+    </script>
+    <script>
+        function activateDataType(element) {
+            var cards_array = ['card-important', 'card-due', 'card-today', 'card-all'];
+            var data_type = element.getAttribute('data-label-type');
+
+            cards_array.forEach(function (card)
+            {
+                var c = document.getElementById(card);
+
+                c.style.border = 'none';
+                c.style.boxShadow = 'none'
+                c.style.transform = 'scale(1,1)'
+            })
+
+            element.style.border = 'solid 5px #36db96'
+            element.style.boxShadow = '5px 10px #4031AD:'
+            element.style.transform = 'scale(0.9,0.9)'
+
+            var all_items = document.getElementsByClassName('items');
+            console.log(data_type)
+
+            for (let item of all_items) {
+                item.style.display = 'none'
+            }
+
+
+            if (data_type == 'important') {
+                var items = document.getElementsByClassName('important')
+            } else if (data_type == 'due') {
+                var items = document.getElementsByClassName('due')
+            } else if (data_type == 'today') {
+                var items = document.getElementsByClassName('today')
+            } else {
+                var items = document.getElementsByClassName('items')
+            }
+
+            for (let item of items) {
+                item.style.display = 'block'
+            }
+        }
+    </script>
+{% endblock %}
