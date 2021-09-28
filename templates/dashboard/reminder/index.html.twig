@@ -12,326 +12,267 @@
 {% endblock %}
 
 {% block body %}
-    <div id="content" class="main-content content-reminder-sidebar">
-        <div class="layout-px-spacing">
-            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
-                <div class="col-lg-12">
-                    <div class="widget-content searchable-container list">
+    {% include 'dashboard/includes/board_header_without_calendar.html.twig' %}
 
-                        <div class="row">
-                            <div class="col-6 layout-spacing align-self-center">
-                                <h4>{{ active_list }}</h4>
-                            </div>
 
-                            <div class="col-6 text-sm-right text-center layout-spacing align-self-center">
-                                <div class="d-flex justify-content-sm-end justify-content-center">
-                                    <button id="btn-add-reminder" class="btn btn-primary" type="button">یادداشت جدید
-                                    </button>
-                                </div>
-
-                                <div class="modal fade" id="addReminderModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="addReminderModalTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <form id="addReminderModalTitle"
-                                                  action="{{ path('dashboard.reminder.new') }}" method="post">
-                                                <div class="modal-body">
-                                                    <i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
-                                                    <div class="add-contact-box">
-                                                        <div class="add-contact-content">
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <select name="reminder_list" id="reminder_list"
-                                                                            class="form-control">
-                                                                        <option value="-" selected>انتخاب لیست</option>
-                                                                        {% for reminder_list in reminder_lists %}
-                                                                            <option value="{{ reminder_list.id }}">{{ reminder_list.name }}</option>
-                                                                        {% endfor %}
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="contact-name">
-                                                                        <input type="text" id="description"
-                                                                               name="description" class="form-control"
-                                                                               placeholder="یادداشت">
-                                                                        <span class="validation-text"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="contact-name">
-                                                                        <input type="text" id="due_date" name="due_date"
-                                                                               class="form-control"
-                                                                               placeholder="تاریخ">
-                                                                        <span class="validation-text"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="contact-name text-right">
-                                                                        <input type="checkbox" id="important"
-                                                                               name="important"
-                                                                               class="form-check-input"
-                                                                               placeholder="تاریخ">
-                                                                        <label class="form-check-label" for="important">مهم
-                                                                            است</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button id="btn-edit" type="submit" class="float-left btn">ویرایش
-                                                    </button>
-
-                                                    <button class="btn" type="button" data-dismiss="modal"><i
-                                                                class="flaticon-delete-1"></i> بازگشت
-                                                    </button>
-
-                                                    <button id="btn-add" type="submit" class="btn">افزودن</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal fade" id="addReminderListModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="addReminderModalTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <form id="addReminderModalTitle"
-                                                  action="{{ path('dashboard.reminder.new.list') }}" method="post">
-                                                <div class="modal-body">
-                                                    <i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
-                                                    <div class="add-contact-box">
-                                                        <div class="add-contact-content">
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div class="contact-name">
-                                                                        <input type="text" id="name"
-                                                                               name="name" class="form-control"
-                                                                               placeholder="نام لیست">
-                                                                        <span class="validation-text"></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button id="btn-edit" type="submit" class="float-left btn">ویرایش
-                                                    </button>
-
-                                                    <button class="btn" type="button" data-dismiss="modal"><i
-                                                                class="flaticon-delete-1"></i> بازگشت
-                                                    </button>
-
-                                                    <button id="btn-add" type="submit" class="btn">افزودن</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="searchable-items list">
-                            {% for reminder in reminders %}
-                                <div class="items {% if reminder.due_date %}due{% endif %} {% if reminder.is_today %}today{% endif %} {% if reminder.important %}important{% endif %}">
-                                    <div class="item-content">
-                                        <div class="user-profile">
-                                            <div class="n-chk align-self-center text-center">
-                                                <div class="custom-control custom-checkbox mb-3">
-                                                    <input type="checkbox" class="custom-control-input" id="reminder_check_{{ reminder.id }}"
-                                                           onchange="changeReminderState({{ reminder.id }}, this.checked)"
-                                                           {% if reminder.done %}checked disabled{% endif %}>
-                                                    <label class="custom-control-label" for="reminder_check_{{ reminder.id }}"></label>
-                                                </div>
-{#                                                <label class="new-control new-checkbox checkbox-primary">#}
-{#                                                    <input id="reminder_check_{{ reminder.id }}" type="checkbox"#}
-{#                                                           class="new-control-input contact-chkbox"#}
-{#                                                           onchange="changeReminderState({{ reminder.id }}, this.checked)"#}
-{#                                                           {% if reminder.done %}checked disabled{% endif %}>#}
-{#                                                    <span class="new-control-indicator"></span>#}
-{#                                                </label>#}
-                                            </div>
-                                            <div class="user-meta-info ml-2" style="margin: auto">
-                                                <div class="user-meta-info">
-                                                    <p class="user-name" {% if reminder.done %}style="text-decoration: line-through;"{% endif %}>{{ reminder.description }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="action-btn">
-                                            {% if reminder.due_date %}
-                                                <span>{{ reminder.due_date }}</span>
-                                            {% endif %}
-                                            <svg class="m-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                 viewBox="0 0 29.25 29.25">
-                                                <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
-                                                      d="M18,3.375A14.625,14.625,0,1,0,32.625,18,14.623,14.623,0,0,0,18,3.375Zm.984,15.891A.987.987,0,0,1,18,20.25H11.25a.984.984,0,0,1,0-1.969h5.766V9a.984.984,0,0,1,1.969,0Z"
-                                                      transform="translate(-3.375 -3.375)"
-                                                      fill="{% if reminder.due_date %}#36db96{% else %}#3B4451{% endif %}"/>
-                                            </svg>
-                                            <svg class="m-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                 viewBox="0 0 35.438 36">
-                                                <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
-                                                      d="M24.579,6.946C20.811,6.946,17.7,4.5,12.962,4.5a13.666,13.666,0,0,0-4.784.845A3.938,3.938,0,1,0,2.25,7.168V34.313A1.687,1.687,0,0,0,3.938,36H5.063A1.687,1.687,0,0,0,6.75,34.313V27.675A19.645,19.645,0,0,1,14.8,26.12c3.768,0,6.88,2.446,11.617,2.446a14.72,14.72,0,0,0,8.614-2.873A2.246,2.246,0,0,0,36,23.839V6.746a2.25,2.25,0,0,0-3.2-2.04,20.471,20.471,0,0,1-8.223,2.24Z"
-                                                      transform="translate(-0.563 0)"
-                                                      fill="{% if reminder.important %}#ff8900{% else %}#3B4451{% endif %}"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                    </div>
-                </div>
+    <div class="board__inner">
+        <div class="board__inner__header">
+            <div class="board__inner__header__title">
+                داشبورد
+            </div>
+            <div class="board__inner__header__describe">
+                در یک نما می توانید ، برنامه کلی روز خود را ببینید
             </div>
         </div>
-    </div>
-    <div class="reminder-section">
-        <div class="reminder-section-content">
-            <div class="row">
-                <div class="col-6">
-                    <div class="card" onclick="activateDataType(this)" id="card-important" data-label-type="important">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-9">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="35.438" height="36"
-                                         viewBox="0 0 35.438 36">
-                                        <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
-                                              d="M24.579,6.946C20.811,6.946,17.7,4.5,12.962,4.5a13.666,13.666,0,0,0-4.784.845A3.938,3.938,0,1,0,2.25,7.168V34.313A1.687,1.687,0,0,0,3.938,36H5.063A1.687,1.687,0,0,0,6.75,34.313V27.675A19.645,19.645,0,0,1,14.8,26.12c3.768,0,6.88,2.446,11.617,2.446a14.72,14.72,0,0,0,8.614-2.873A2.246,2.246,0,0,0,36,23.839V6.746a2.25,2.25,0,0,0-3.2-2.04,20.471,20.471,0,0,1-8.223,2.24Z"
-                                              transform="translate(-0.563 0)" fill="#ff8900"/>
-                                    </svg>
-                                </div>
-                                <div class="col-3">
-                                    <span>{{ important_count }}</span>
-                                </div>
-                            </div>
-                            <br>
-                            <span class="pr-2">کارهای مهم</span>
-                        </div>
+        <div class="board__inner__body">
+            <div class="board__inner__body__main">
+
+                <div class="board__inner__body__main__header">
+                    <div class="board__inner__body__main__header__title">
+                        لیست شماره یک
+                    </div>
+                    <div class="board__inner__body__main__header__action">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="37.208" height="27.053"
+                             viewBox="0 0 37.208 27.053">
+                            <rect id="Rectangle_934" data-name="Rectangle 934" width="37.208" height="27.053"
+                                  rx="4" fill="#6e6e6e" />
+                            <g id="_" data-name="+" transform="translate(8.835 4.885)">
+                                <path id="Union_1" data-name="Union 1"
+                                      d="M8.548,17.284V9.722H0V7.562H8.548V0h2.443V7.562h8.547V9.722H10.991v7.562Z"
+                                      transform="translate(0 0)" fill="#fff" />
+                            </g>
+                        </svg>
+
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="card" onclick="activateDataType(this)" id="card-today" data-label-type="today">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-9">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="30" viewBox="0 0 27 30">
-                                        <path id="Icon_material-today" data-name="Icon material-today"
-                                              d="M28.5,4.5H27v-3H24v3H12v-3H9v3H7.5a2.986,2.986,0,0,0-2.985,3L4.5,28.5a3,3,0,0,0,3,3h21a3.009,3.009,0,0,0,3-3V7.5A3.009,3.009,0,0,0,28.5,4.5Zm0,24H7.5V12h21ZM10.5,15H18v7.5H10.5Z"
-                                              transform="translate(-4.5 -1.5)" fill="#009dff"/>
-                                    </svg>
-                                </div>
-                                <div class="col-3">
-                                    <span>{{ today_count }}</span>
-                                </div>
-                            </div>
-                            <br>
-                            <span class="pr-2">امروز </span>
+                <div class="board__inner__body__main__content">
+                    <!-- item1 -->
+                    <div class="board__inner__body__main__content__item">
+                        <div class="board__inner__body__main__content__item__describe">
+                            پیگیری لابراتور
+                        </div>
+                        <div class="board__inner__body__main__content__item__actions">
+                            <a href="#" data-action="clock">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18.035" height="18.035"
+                                     viewBox="0 0 18.035 18.035">
+                                    <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
+                                          d="M12.393,3.375a9.018,9.018,0,1,0,9.018,9.018A9.016,9.016,0,0,0,12.393,3.375Zm.607,9.8a.609.609,0,0,1-.607.607H8.231a.607.607,0,0,1,0-1.214h3.555V6.843a.607.607,0,0,1,1.214,0Z"
+                                          transform="translate(-3.375 -3.375)" fill="#d3d3d3" />
+                                </svg>
+                            </a>
+                            <a href="#" data-action="flag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17.754" height="18.035"
+                                     viewBox="0 0 17.754 18.035">
+                                    <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
+                                          d="M12.594,3.48c-1.888,0-3.447-1.225-5.82-1.225a6.846,6.846,0,0,0-2.4.423,1.973,1.973,0,1,0-2.97.913v13.6a.845.845,0,0,0,.845.845h.564a.845.845,0,0,0,.845-.845V13.865a9.842,9.842,0,0,1,4.031-.779c1.888,0,3.447,1.225,5.82,1.225a7.374,7.374,0,0,0,4.315-1.439,1.125,1.125,0,0,0,.488-.928V3.38a1.127,1.127,0,0,0-1.6-1.022,10.255,10.255,0,0,1-4.12,1.122Z"
+                                          transform="translate(-0.563 0)" fill="#d3d3d3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- item2 -->
+                    <div class="board__inner__body__main__content__item">
+                        <div class="board__inner__body__main__content__item__describe">
+                            زنگ زدن به دکتر
+                        </div>
+                        <div class="board__inner__body__main__content__item__actions">
+                            <a href="#" data-action="clock">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18.035" height="18.035"
+                                     viewBox="0 0 18.035 18.035">
+                                    <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
+                                          d="M12.393,3.375a9.018,9.018,0,1,0,9.018,9.018A9.016,9.016,0,0,0,12.393,3.375Zm.607,9.8a.609.609,0,0,1-.607.607H8.231a.607.607,0,0,1,0-1.214h3.555V6.843a.607.607,0,0,1,1.214,0Z"
+                                          transform="translate(-3.375 -3.375)" fill="#d3d3d3" />
+                                </svg>
+                            </a>
+                            <a href="#" data-action="flag">
+                                <svg style="fill: #FD8924!important;" xmlns="http://www.w3.org/2000/svg"
+                                     width="17.754" height="18.035" viewBox="0 0 17.754 18.035">
+                                    <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
+                                          d="M12.594,3.48c-1.888,0-3.447-1.225-5.82-1.225a6.846,6.846,0,0,0-2.4.423,1.973,1.973,0,1,0-2.97.913v13.6a.845.845,0,0,0,.845.845h.564a.845.845,0,0,0,.845-.845V13.865a9.842,9.842,0,0,1,4.031-.779c1.888,0,3.447,1.225,5.82,1.225a7.374,7.374,0,0,0,4.315-1.439,1.125,1.125,0,0,0,.488-.928V3.38a1.127,1.127,0,0,0-1.6-1.022,10.255,10.255,0,0,1-4.12,1.122Z"
+                                          transform="translate(-0.563 0)" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- item3 -->
+                    <div class="board__inner__body__main__content__item">
+                        <div class="board__inner__body__main__content__item__describe">
+                            خرید توربین مطب
+                        </div>
+                        <div class="board__inner__body__main__content__item__actions">
+                            <a href="#" data-action="clock">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18.035" height="18.035"
+                                     viewBox="0 0 18.035 18.035">
+                                    <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
+                                          d="M12.393,3.375a9.018,9.018,0,1,0,9.018,9.018A9.016,9.016,0,0,0,12.393,3.375Zm.607,9.8a.609.609,0,0,1-.607.607H8.231a.607.607,0,0,1,0-1.214h3.555V6.843a.607.607,0,0,1,1.214,0Z"
+                                          transform="translate(-3.375 -3.375)" fill="#d3d3d3" />
+                                </svg>
+                            </a>
+                            <a href="#" data-action="flag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17.754" height="18.035"
+                                     viewBox="0 0 17.754 18.035">
+                                    <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
+                                          d="M12.594,3.48c-1.888,0-3.447-1.225-5.82-1.225a6.846,6.846,0,0,0-2.4.423,1.973,1.973,0,1,0-2.97.913v13.6a.845.845,0,0,0,.845.845h.564a.845.845,0,0,0,.845-.845V13.865a9.842,9.842,0,0,1,4.031-.779c1.888,0,3.447,1.225,5.82,1.225a7.374,7.374,0,0,0,4.315-1.439,1.125,1.125,0,0,0,.488-.928V3.38a1.127,1.127,0,0,0-1.6-1.022,10.255,10.255,0,0,1-4.12,1.122Z"
+                                          transform="translate(-0.563 0)" fill="#d3d3d3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- item4 -->
+                    <div class="board__inner__body__main__content__item">
+                        <div class="board__inner__body__main__content__item__describe">
+                            خرید توربین فشم
+                        </div>
+                        <div class="board__inner__body__main__content__item__actions">
+                            <a href="#" data-action="date">۹۹/۸/۱۷</a>
+
+                            <a href="#" data-action="clock">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18.035" height="18.035"
+                                     viewBox="0 0 18.035 18.035">
+                                    <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
+                                          d="M12.393,3.375a9.018,9.018,0,1,0,9.018,9.018A9.016,9.016,0,0,0,12.393,3.375Zm.607,9.8a.609.609,0,0,1-.607.607H8.231a.607.607,0,0,1,0-1.214h3.555V6.843a.607.607,0,0,1,1.214,0Z"
+                                          transform="translate(-3.375 -3.375)" fill="#36DB96" />
+                                </svg>
+                            </a>
+                            <a href="#" data-action="flag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17.754" height="18.035"
+                                     viewBox="0 0 17.754 18.035">
+                                    <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
+                                          d="M12.594,3.48c-1.888,0-3.447-1.225-5.82-1.225a6.846,6.846,0,0,0-2.4.423,1.973,1.973,0,1,0-2.97.913v13.6a.845.845,0,0,0,.845.845h.564a.845.845,0,0,0,.845-.845V13.865a9.842,9.842,0,0,1,4.031-.779c1.888,0,3.447,1.225,5.82,1.225a7.374,7.374,0,0,0,4.315-1.439,1.125,1.125,0,0,0,.488-.928V3.38a1.127,1.127,0,0,0-1.6-1.022,10.255,10.255,0,0,1-4.12,1.122Z"
+                                          transform="translate(-0.563 0)" fill="#d3d3d3" />
+                                </svg>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mt-2">
-                <div class="col-6">
-                    <div class="card" onclick="activateDataType(this)" id="card-due" data-label-type="due">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-9">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="29.25" height="29.25"
-                                         viewBox="0 0 29.25 29.25">
-                                        <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
-                                              d="M18,3.375A14.625,14.625,0,1,0,32.625,18,14.623,14.623,0,0,0,18,3.375Zm.984,15.891A.987.987,0,0,1,18,20.25H11.25a.984.984,0,0,1,0-1.969h5.766V9a.984.984,0,0,1,1.969,0Z"
-                                              transform="translate(-3.375 -3.375)" fill="#36db96"/>
-                                    </svg>
-                                </div>
-                                <div class="col-3">
-                                    <span>{{ due_count }}</span>
-                                </div>
-                            </div>
-                            <br>
-                            <span class="pr-2">زمان‌بندی شده</span>
+            <div class="board__inner__body__nav">
+                <div class="board__inner__body__nav__search">
+                    <div class="board__inner__body__nav__search__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20.29" height="20.295"
+                             viewBox="0 0 20.29 20.295">
+                            <path id="Icon_ionic-ios-search" data-name="Icon ionic-ios-search"
+                                  d="M24.552,23.319l-5.643-5.7a8.042,8.042,0,1,0-1.221,1.236l5.606,5.659a.868.868,0,0,0,1.226.032A.874.874,0,0,0,24.552,23.319ZM12.589,18.928a6.35,6.35,0,1,1,4.491-1.86A6.311,6.311,0,0,1,12.589,18.928Z"
+                                  transform="translate(-4.5 -4.493)" fill="#36db96" />
+                        </svg>
+                    </div>
+                    <input type="text" placeholder="جستجو کنید..">
+                </div>
+                <div class="board__inner__body__nav__badges">
+                    <div class="board__inner__body__nav__badges__item">
+                        <div class="board__inner__body__nav__badges__item__icon"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="26.63" height="27.053"
+                                    viewBox="0 0 26.63 27.053">
+                                <path id="Icon_awesome-flag" data-name="Icon awesome-flag"
+                                      d="M18.61,5.219c-2.831,0-5.17-1.838-8.73-1.838a10.27,10.27,0,0,0-3.6.635,2.959,2.959,0,1,0-4.454,1.37v20.4A1.268,1.268,0,0,0,3.1,27.053h.845a1.268,1.268,0,0,0,1.268-1.268V20.8a14.763,14.763,0,0,1,6.047-1.169c2.831,0,5.17,1.838,8.73,1.838a11.061,11.061,0,0,0,6.473-2.159,1.688,1.688,0,0,0,.731-1.393V5.07a1.691,1.691,0,0,0-2.4-1.533A15.383,15.383,0,0,1,18.61,5.219Z"
+                                      transform="translate(-0.563 0)" fill="#ff8900" />
+                            </svg>
                         </div>
+                        <div class="board__inner__body__nav__badges__item__number">0</div>
+                        <div class="board__inner__body__nav__badges__item__lable">کار های مهم</div>
+                    </div>
+
+                    <div class="board__inner__body__nav__badges__item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20.29" height="22.544"
+                             viewBox="0 0 20.29 22.544">
+                            <path id="Icon_material-today" data-name="Icon material-today"
+                                  d="M22.535,3.754H21.408V1.5H19.154V3.754H10.136V1.5H7.882V3.754H6.754A2.244,2.244,0,0,0,4.511,6.009L4.5,21.79a2.254,2.254,0,0,0,2.254,2.254H22.535A2.261,2.261,0,0,0,24.79,21.79V6.009A2.261,2.261,0,0,0,22.535,3.754Zm0,18.035H6.754V9.39H22.535ZM9.009,11.645h5.636v5.636H9.009Z"
+                                  transform="translate(-4.5 -1.5)" fill="#009dff" />
+                        </svg>
+
+                        <div class="board__inner__body__nav__badges__item__number">0</div>
+                        <div class="board__inner__body__nav__badges__item__lable">امروز</div>
+                    </div>
+
+                    <div class="board__inner__body__nav__badges__item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21.981" height="21.981"
+                             viewBox="0 0 21.981 21.981">
+                            <path id="Icon_ionic-ios-time" data-name="Icon ionic-ios-time"
+                                  d="M14.365,3.375a10.99,10.99,0,1,0,10.99,10.99A10.989,10.989,0,0,0,14.365,3.375Zm.74,11.941a.742.742,0,0,1-.74.74H9.293a.74.74,0,1,1,0-1.479h4.333V7.6a.74.74,0,1,1,1.479,0Z"
+                                  transform="translate(-3.375 -3.375)" fill="#36db96" />
+                        </svg>
+
+                        <div class="board__inner__body__nav__badges__item__number">0</div>
+                        <div class="board__inner__body__nav__badges__item__lable">لابراتوآر</div>
+                    </div>
+                    <div class="board__inner__body__nav__badges__item">
+                        <svg id="Icon_ionic-ios-wallet" data-name="Icon ionic-ios-wallet"
+                             xmlns="http://www.w3.org/2000/svg" width="21.981" height="20.29"
+                             viewBox="0 0 21.981 20.29">
+                            <path id="Path_381" data-name="Path 381"
+                                  d="M22.185,11.25H6.545a3.173,3.173,0,0,0-3.17,3.17V23.3a3.173,3.173,0,0,0,3.17,3.17h15.64a3.173,3.173,0,0,0,3.17-3.17V14.42A3.173,3.173,0,0,0,22.185,11.25Z"
+                                  transform="translate(-3.375 -6.177)" fill="#fff" />
+                            <path id="Path_382" data-name="Path 382"
+                                  d="M19.237,4.553,6.825,6.978C5.874,7.189,4.5,8.146,4.5,9.308a3.329,3.329,0,0,1,2.589-1H22.254V7.221a3.034,3.034,0,0,0-.734-1.987h0A2.5,2.5,0,0,0,19.237,4.553Z"
+                                  transform="translate(-3.655 -4.499)" fill="#fff" />
+                        </svg>
+
+                        <div class="board__inner__body__nav__badges__item__number">0</div>
+                        <div class="board__inner__body__nav__badges__item__lable">تمام کار ها</div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="card" onclick="activateDataType(this)" id="card-all" data-label-type="all">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-9">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="29.25" height="27.001"
-                                         viewBox="0 0 29.25 27.001">
-                                        <g id="Icon_ionic-ios-wallet" data-name="Icon ionic-ios-wallet"
-                                           transform="translate(-3.375 -4.499)">
-                                            <path id="Path_381" data-name="Path 381"
-                                                  d="M28.406,11.25H7.594a4.222,4.222,0,0,0-4.219,4.219V27.281A4.222,4.222,0,0,0,7.594,31.5H28.406a4.222,4.222,0,0,0,4.219-4.219V15.469A4.222,4.222,0,0,0,28.406,11.25Z"
-                                                  fill="#fff"/>
-                                            <path id="Path_382" data-name="Path 382"
-                                                  d="M24.11,4.57,7.594,7.8C6.328,8.079,4.5,9.352,4.5,10.9A4.43,4.43,0,0,1,7.945,9.563h20.18V8.121a4.037,4.037,0,0,0-.977-2.644h0A3.325,3.325,0,0,0,24.11,4.57Z"
-                                                  fill="#fff"/>
+                <div class="board__inner__body__nav__list">
+                    <a href="#" class="board__inner__body__nav__list__item">
+                                <span class="board__inner__body__nav__list__item__icon"><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            width="40.544" height="40.544" viewBox="0 0 40.544 40.544">
+                                        <defs>
+                                            <filter id="Ellipse_299" x="0" y="0" width="40.544" height="40.544"
+                                                    filterUnits="userSpaceOnUse">
+                                                <feOffset dy="3" input="SourceAlpha" />
+                                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                                <feFlood flood-opacity="0.161" />
+                                                <feComposite operator="in" in2="blur" />
+                                                <feComposite in="SourceGraphic" />
+                                            </filter>
+                                        </defs>
+                                        <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Ellipse_299)">
+                                            <circle id="Ellipse_299-2" data-name="Ellipse 299" cx="11.272" cy="11.272"
+                                                    r="11.272" transform="translate(9 6)" fill="#4031ad" />
+                                        </g>
+                                        <path id="Icon_awesome-list-ul" data-name="Icon awesome-list-ul"
+                                              d="M1.184,0A1.184,1.184,0,1,0,2.367,1.184,1.184,1.184,0,0,0,1.184,0Zm0,3.945A1.184,1.184,0,1,0,2.367,5.129,1.184,1.184,0,0,0,1.184,3.945Zm0,3.945A1.184,1.184,0,1,0,2.367,9.074,1.184,1.184,0,0,0,1.184,7.891Zm11.047.395H4.34a.4.4,0,0,0-.395.395v.789a.4.4,0,0,0,.395.395H12.23a.4.4,0,0,0,.395-.395V8.68A.4.4,0,0,0,12.23,8.285Zm0-7.891H4.34a.4.4,0,0,0-.395.395v.789a.4.4,0,0,0,.395.395H12.23a.4.4,0,0,0,.395-.395V.789A.4.4,0,0,0,12.23.395Zm0,3.945H4.34a.4.4,0,0,0-.395.395v.789a.4.4,0,0,0,.395.395H12.23a.4.4,0,0,0,.395-.395V4.734A.4.4,0,0,0,12.23,4.34Z"
+                                              transform="translate(26.585 22.401) rotate(180)" fill="#fff" />
+                                    </svg>
+                                    لیست شماره 1
+                                </span>
+                    </a>
+
+
+                    <a href="#" class="board__inner__body__nav__list__item last">
+                                <span class="board__inner__body__nav__list__item__icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                         width="40.544" height="40.544" viewBox="0 0 40.544 40.544">
+                                        <defs>
+                                            <filter id="Ellipse_317" x="0" y="0" width="40.544" height="40.544"
+                                                    filterUnits="userSpaceOnUse">
+                                                <feOffset dy="3" input="SourceAlpha" />
+                                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                                <feFlood flood-opacity="0.161" />
+                                                <feComposite operator="in" in2="blur" />
+                                                <feComposite in="SourceGraphic" />
+                                            </filter>
+                                        </defs>
+                                        <g id="Group_175" data-name="Group 175"
+                                           transform="translate(-360.049 -839.412)">
+                                            <g transform="matrix(1, 0, 0, 1, 360.05, 839.41)"
+                                               filter="url(#Ellipse_317)">
+                                                <circle id="Ellipse_317-2" data-name="Ellipse 317" cx="11.272"
+                                                        cy="11.272" r="11.272" transform="translate(9 6)" fill="#4031ad" />
+                                            </g>
+                                            <g id="_" data-name="+" transform="translate(375.813 852.551)">
+                                                <path id="Union_1" data-name="Union 1"
+                                                      d="M3.945,8.266V4.65H0V3.616H3.945V0H5.073V3.616H9.018V4.65H5.073V8.266Z"
+                                                      transform="translate(0 0)" fill="#fff" />
+                                            </g>
                                         </g>
                                     </svg>
-                                </div>
-                                <div class="col-3">
-                                    <span>{{ reminders | length }}</span>
-                                </div>
-                            </div>
-                            <br>
-                            <span class="pr-2">تمام کارها</span>
-                        </div>
-                    </div>
+                                    اضافه کردن لیست
+                                </span>
+                    </a>
+
                 </div>
             </div>
-            <section class="mt-5 my-reminder-list">
-                <h5 style="color: #36DB96">لیست‌های من
-                    <a class="clinitick-custom-link-sm clinitick-custom-link" href="javascript:void(0)" id="btn-add-reminder-list">+</a>
-                </h5>
-                <div class="row">
-                    <div class="col-12 p-0">
-                        <div class="card">
-                            <div class="card-body">
-                                {% for reminder_list in reminder_lists %}
-                                    <a class="row" href="{{ path('dashboard.reminder.index',{'fetchList':reminder_list.id}) }}">
-                                        <div class="col-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48"
-                                                 viewBox="0 0 48 48">
-                                                <defs>
-                                                    <filter id="Ellipse_262" x="0" y="0" width="48" height="48"
-                                                            filterUnits="userSpaceOnUse">
-                                                        <feOffset dy="3" input="SourceAlpha"/>
-                                                        <feGaussianBlur stdDeviation="3" result="blur"/>
-                                                        <feFlood flood-opacity="0.161"/>
-                                                        <feComposite operator="in" in2="blur"/>
-                                                        <feComposite in="SourceGraphic"/>
-                                                    </filter>
-                                                </defs>
-                                                <g id="Group_91" data-name="Group 91" transform="translate(-310 -550)">
-                                                    <g transform="matrix(1, 0, 0, 1, 310, 550)" filter="url(#Ellipse_262)">
-                                                        <circle id="Ellipse_262-2" data-name="Ellipse 262" cx="15" cy="15"
-                                                                r="15" transform="translate(9 6)" fill="#4031ad"/>
-                                                    </g>
-                                                    <path id="Icon_awesome-list-ul" data-name="Icon awesome-list-ul"
-                                                          d="M1.575,3.375A1.575,1.575,0,1,0,3.15,4.95,1.575,1.575,0,0,0,1.575,3.375Zm0,5.25A1.575,1.575,0,1,0,3.15,10.2,1.575,1.575,0,0,0,1.575,8.625Zm0,5.25A1.575,1.575,0,1,0,3.15,15.45a1.575,1.575,0,0,0-1.575-1.575Zm14.7.525H5.775a.525.525,0,0,0-.525.525v1.05a.525.525,0,0,0,.525.525h10.5a.525.525,0,0,0,.525-.525v-1.05A.525.525,0,0,0,16.275,14.4Zm0-10.5H5.775a.525.525,0,0,0-.525.525v1.05A.525.525,0,0,0,5.775,6h10.5a.525.525,0,0,0,.525-.525V4.425A.525.525,0,0,0,16.275,3.9Zm0,5.25H5.775a.525.525,0,0,0-.525.525v1.05a.525.525,0,0,0,.525.525h10.5a.525.525,0,0,0,.525-.525V9.675A.525.525,0,0,0,16.275,9.15Z"
-                                                          transform="translate(342.4 582.025) rotate(180)" fill="#fff"/>
-                                                </g>
-                                            </svg>
-                                        </div>
-                                        <div class="col-8 vertical-align-center">
-                                            <span>{{ reminder_list.name }}</span>
-                                        </div>
-                                        <div class="col-2 vertical-align-center">
-                                            <span>{{ reminder_list.cnt }}</span>
-                                        </div>
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </div>
     </div>
 {% endblock %}

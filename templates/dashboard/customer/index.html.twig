@@ -3,80 +3,95 @@
 {% block title %}لیست بیماران{% endblock %}
 
 {% block css %}
-    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
-    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/datatables.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/table/datatable/dt-global_style.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css">
 {% endblock %}
 
 {% block body %}
-    <div id="content" class="main-content">
-        <div class="layout-px-spacing">
-            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
-                <div class="col-lg-12">
-                    <div class="widget-content searchable-container list">
+    {% include 'dashboard/includes/board_header_without_calendar.html.twig' %}
 
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-5 col-md-5 col-sm-7 filtered-list-search layout-spacing align-self-center">
-                                <div>
-                                    <h4>لیست بیماران</h4>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-8 col-lg-7 col-md-7 col-sm-5 text-sm-right text-center layout-spacing align-self-center">
-                                    <a class="btn btn-primary" href="{{ path('dashboard.customer.new') }}">
-                                        بیمار جدید
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+    <div class="board__inner">
+        <div class="board__inner__header">
+            <div class="board__inner__header__title">
+                داشبورد
+            </div>
+            <div class="board__inner__header__describe">
+                لیست بیماران
+            </div>
 
 
-                    <div class="table-responsive mb-4 mt-4">
-                        <table id="dataTable" class="table table-hover" style="width:100%">
-                            <thead>
-                            <tr>
-                                <th>نام بیمار</th>
-                                <th> تلفن</th>
-                                <th> ایمیل</th>
-                                <th>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-edit-2 edit">
-                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                    </svg>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for c in customers %}
-                                <tr>
-                                    <td>{{ c.name }}</td>
-                                    <td>{{ c.mobile }}</td>
-                                    <td>{{ c.email }}</td>
-                                    <td>
-                                        <a href="{{ path('dashboard.customer.preview',{'customer':c.id}) }}" class="btn btn-warning">مشاهده</a>
-{#                                        <a href="{{ path('dashboard.reservation.new',{'customer':c.id}) }}" class="btn btn-primary">ثبت نوبت جدید</a>#}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+        </div>
+        <div class="board__inner__body">
+            <div class="board__inner__body__main full">
+
+                <div class="board__inner__body__main__header">
+                    <div class="board__inner__body__main__header__title">
+                        بیماران
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="18" viewBox="0 0 28 18">
+                            <path id="Polygon_3" data-name="Polygon 3" d="M14,0,28,18H0Z"
+                                  transform="translate(28 18) rotate(180)" fill="#4031ad"/>
+                        </svg>
+
                     </div>
-
+                    <div class="board__inner__body__main__header__action">
+                        <a href="{{ path('dashboard.customer.new') }}">
+                            <svg id="Component_85_1" data-name="Component 85 – 1" xmlns="http://www.w3.org/2000/svg"
+                                 width="36" height="36" viewBox="0 0 36 36">
+                                <circle id="Ellipse_226" data-name="Ellipse 226" cx="18" cy="18" r="18"
+                                        fill="#4031ad"/>
+                                <g id="_" data-name="+" transform="translate(9 9)">
+                                    <path id="Union_1" data-name="Union 1"
+                                          d="M7.875,17V9.563H0V7.437H7.875V0h2.251V7.437H18V9.563H10.126V17Z"
+                                          transform="translate(0 0)" fill="#fff"/>
+                                </g>
+                            </svg>
+                        </a>
 
                     </div>
                 </div>
+                <div class="board__inner__body__main__content">
+                    <table class="board__inner__body__main__content__table" id="customer_table">
+                        <thead>
+                        <tr>
+                            <th>نام بیمار</th>
+                            <th> تلفن</th>
+                            <th> ایمیل</th>
+                            <th>عملیات</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for c in customers %}
+                            <tr>
+                                <td>{{ c.name }}</td>
+                                <td>{{ c.mobile }}</td>
+                                <td>{{ c.email }}</td>
+                                <td>
+                                    <a href="{{ path('dashboard.customer.preview',{'customer':c.id}) }}"
+                                       class="btn btn-warning">مشاهده</a>
+                                    {# <a href="{{ path('dashboard.reservation.new',{'customer':c.id}) }}" class="btn btn-primary">ثبت نوبت جدید</a> #}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
         </div>
     </div>
 {% endblock %}
 
 {% block js %}
-    <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/table/datatable/datatables.js') }}"></script>
-    <script src="{{ asset('assets/assets/js/custom_dataTable.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#customer_table').DataTable({
+                paging: true,
+                "columnDefs": [
+                    {"sortable": true, "targets": "_all"}
+                ],
+                order: [[0, "desc"]]
+            });
+        });
+    </script>
 {% endblock %}

@@ -32,10 +32,6 @@ class CustomerController extends AbstractController
      */
     public function index(CustomersRepository $repository): Response
     {
-        $patientApi = new PatientApi(HttpClient::create(), $this->getUser());
-        $respo = $patientApi->getDentistPatients();
-
-        dd($respo);
         $customers = [];
         foreach ($repository->findAll() as $item) {
             $customers[] = [

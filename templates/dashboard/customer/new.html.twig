@@ -2,178 +2,252 @@
 
 {% block title %}بیمار جدید{% endblock %}
 
-{% block css %}
-    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/forms/theme-checkbox-radio.css') }}">
-    <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('assets/plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet"
-          type="text/css"/>
-{% endblock %}
-
 {% block body %}
-    <div id="content" class="main-content">
-        <div class="layout-px-spacing">
-            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
-                <div class="col-lg-12">
-                    <div class="widget-content">
-                        <form action="{{ path('dashboard.customer.new') }}" method="post">
-                            <div class="row">
-                                <div class="col-8">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label for="fname">نام</label>
-                                            <input class="form-control" type="text" name="fname" id="fname">
-                                        </div>
-                                        <div class="col-4">
-                                            <label for="lname">نام خانوادگی</label>
-                                            <input class="form-control" type="text" name="lname" id="lname">
-                                        </div>
-                                        <div class="col-4">
-                                            <label for="mobile">شماره موبایل</label>
-                                            <input class="form-control" type="text" name="mobile" id="mobile" placeholder="مثال: 09123456789">
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-lg-6 col-12">
-                                            <label for="reason">بیمار برای دکتر</label>
-                                            <select name="doctor" id="doctor" class="form-control">
-                                                {% for doctor in doctors %}
-                                                    <option value="{{ doctor.id }}">{{ doctor.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <label for="reason">علت اصلی مراجعه</label>
-                                            <input class="form-control" type="text" name="reason" id="reason">
-                                        </div>
-                                    </div>
-                                    <div class="row mt-5">
-                                        <div class="col-12">
-                                            <h5>تاریخچه پزشکی</h5>
-                                        </div>
-                                    </div>
-                                    <section class="p-4">
-                                        <div class="row mt-2">
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="diabet"
-                                                       id="diabet">
-                                                <label class="form-check-label" for="diabet">دیابت</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="asm" id="asm">
-                                                <label class="form-check-label" for="asm">آسم</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="hepatit"
-                                                       id="hepatit">
-                                                <label class="form-check-label" for="hepatit">هپاتیت</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="aids" id="aids">
-                                                <label class="form-check-label" for="aids">ایدز</label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="kolie" id="kolie">
-                                                <label class="form-check-label" for="kolie">بیماری کلیوی</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="saar" id="saar">
-                                                <label class="form-check-label" for="saar">صرع</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="etiad" id="etiad">
-                                                <label class="form-check-label" for="etiad">اعتیاد</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="bardari"
-                                                       id="bardari">
-                                                <label class="form-check-label" for="bardari">بارداری</label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="romatism"
-                                                       id="romatism">
-                                                <label class="form-check-label" for="romatism">سابقه تب
-                                                    روماتیسمی</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="shimi_darmani"
-                                                       id="shimi_darmani">
-                                                <label class="form-check-label" for="shimi_darmani">شیمی درمانی/پرتو
-                                                    درمانی</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="eneghad"
-                                                       id="eneghad">
-                                                <label class="form-check-label" for="eneghad">بیماری انعقادی</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="saratan"
-                                                       id="saratan">
-                                                <label class="form-check-label" for="saratan">سرطان</label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="ghalb" id="ghalb">
-                                                <label class="form-check-label" for="ghalb">بیماری قلبی عروقی</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="feshar_khun"
-                                                       id="feshar_khun">
-                                                <label class="form-check-label" for="feshar_khun">فشار خونی</label>
-                                            </div>
-                                            <div class="col-3">
-                                                <input class="form-check-input" type="checkbox" name="alergy"
-                                                       id="alergy">
-                                                <label class="form-check-label" for="alergy">آلرژی(حساسیت)</label>
-                                            </div>
-                                            <div class="col-3">
-                                            </div>
-                                        </div>
-                                    </section>
-                                    <div class="row mt-2">
-                                        <div class="col-12">
-                                            <label for="description">توضیحات بیشتر</label>
-                                            <textarea class="form-control" name="description"
-                                                      id="description"></textarea>
-                                        </div>
-                                        <div class="col-12 mt-2">
-                                            <button class="btn btn-primary w-100" type="submit">ثبت بیمار جدید</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div id="fuMultipleFile" class="col-lg-12 layout-spacing">
-                                        <div class="statbox widget box box-shadow">
-                                            <div class="widget-content widget-content-area">
-                                                <div class="custom-file-container" data-upload-id="mySecondImage">
-                                                    <label>بارگذاری عکس‌ها <a href="javascript:void(0)"
-                                                                              class="btn btn-danger custom-file-container__image-clear"
-                                                                              title="Clear Image">حذف تمامی
-                                                            عکس‌ها</a></label>
-                                                    <label class="custom-file-container__custom-file">
-                                                        <input type="file"
-                                                               class="custom-file-container__custom-file__custom-file-input"
-                                                               multiple>
-                                                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760"/>
-                                                        <span class="custom-file-container__custom-file__custom-file-control"></span>
-                                                    </label>
-                                                    <div class="custom-file-container__image-preview"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+    {% include 'dashboard/includes/board_header_without_calendar.html.twig' %}
+
+    <div class="board__inner">
+        <div class="board__inner__header">
+            <div class="board__inner__header__title">
+                بیمار جدید
+            </div>
+            <div class="board__inner__header__describe">
+                در این فرم میتوانید بیمار جدید ثبت کنید
+            </div>
+        </div>
+        <div class="board__inner__body">
+            <div class="board__inner__body__main full">
+                <div class="board__inner__body__main__information">
+                    <h5>
+                        اطلاعات بیمار
+                    </h5>
+                    <div class="board__inner__body__main__information__form">
+                        <div class="row w-100">
+                            <div class="col-8">
+                                <div class="row">
+                                    <div class="col-6"> <input type="text" placeholder="نام کامل بیمار"></div>
+                                    <div class="col-6"> <input type="text" placeholder="شماره تماس"></div>
+                                    <div class="col-12"> <input type="text" placeholder="علت اصلی مراجعه"></div>
                                 </div>
                             </div>
-                        </form>
+                            <div class="col-4 image">
+                                <div id="mySecondImage">
+                                    <img src="img/image.svg" alt="">
+                                    <span>افزودن تصویر</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <br>
+                <div class="board__inner__body__main__history">
+                    <h5>تاریخچه پزشکی</h5>
+                    <div class="row">
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            دیابت
+                                        </span>
+                                <input type="checkbox" checked="checked">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            آسم
+                                        </span>
+                                <input type="checkbox" checked="checked">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            هپاتیت
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            ایدز
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            بیماری کلیوی
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            صرع
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            اعتیاد
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            بارداری
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            سابقه تب روماتیسمی
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            شیمی درمان/ پرتو درمانی
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            بیماری انعقادی
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            سرطان
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            بیماری قلبی عروقی
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            فشار خون
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            آلرژی ( حساسیت )
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                        <span class="text">
+                                            دیابت
+                                        </span>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-12">
+                            <textarea name="" id="" placeholder="سایر توضیحات"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board__inner__body__main__table">
+                    <div class="d-flex justify-content-between my-4">
+                        <h5>طرح درمان</h5>
+                        <div class="board__inner__body__main__table__button">ثبت جدید</div>
+                    </div>
+                    <table class="board__inner__body__main__content__table">
+                        <thead>
+                        <th>شماره دندان</th>
+                        <th> درمان</th>
+                        <th>تاریخ</th>
+                        <th>مبلغ </th>
+                        <th>باقی مانده</th>
+                        <th>مشاهده </th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>01</td>
+                            <td>ایمپلنت </td>
+                            <td>۱/۱۰/۱۴۰۰ </td>
+                            <td>۱۰،۰۰۰،۰۰۰ </td>
+                            <td> ۳،۰۰۰،۰۰۰</td>
+
+                            <td><a href="#"
+                                   class="board__inner__body__main__content__table__button --mustard ">جزییات</a>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>02</td>
+                            <td>ایمپلنت </td>
+                            <td>۱/۱۰/۱۴۰۰ </td>
+                            <td>۱۰،۰۰۰،۰۰۰ </td>
+                            <td> ۳،۰۰۰،۰۰۰</td>
+
+                            <td><a href="#"
+                                   class="board__inner__body__main__content__table__button --mustard">جزییات</a>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>03</td>
+                            <td>ایمپلنت </td>
+                            <td>۱/۱۰/۱۴۰۰ </td>
+                            <td>۱۰،۰۰۰،۰۰۰ </td>
+                            <td> ۳،۰۰۰،۰۰۰</td>
+
+                            <td><a href="#"
+                                   class="board__inner__body__main__content__table__button --mustard">جزییات</a>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
         </div>
     </div>
 {% endblock %}
@@ -181,7 +255,6 @@
 {% block js %}
     <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
-
     <script>
         var secondUpload = new FileUploadWithPreview('mySecondImage')
     </script>

@@ -1,6 +1,6 @@
 {% extends 'dashboard/base.html.twig' %}
 
-{% block title %}لیست بیماران{% endblock %}
+{% block title %}تنظیمات پزشکان{% endblock %}
 
 {% block css %}
     <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
@@ -12,160 +12,260 @@
 {% endblock %}
 
 {% block body %}
-    <div id="content" class="main-content">
-        <div class="layout-px-spacing">
-            <div class="row layout-spacing layout-top-spacing" id="cancel-row">
-                <div class="col-lg-12">
-                    <div class="widget-content searchable-container list">
+    {% include 'dashboard/includes/board_header_without_calendar.html.twig' %}
 
-                        <div class="row">
-                            <div class="col-8 filtered-list-search layout-spacing align-self-center">
-                                <div>
-                                    <h4>تنظیمات</h4>
-                                </div>
+    <div class="board__inner">
+        <div class="board__inner__header">
+            <div class="board__inner__header__title">
+                داشبورد
+            </div>
+            <div class="board__inner__header__describe">
+                در یک نما می توانید ، برنامه کلی روز خود را ببینید
+            </div>
+        </div>
+        <div class="board__inner__body">
+            <form action="{{ path('dashboard.settings.doctor') }}" method="post">
+                <div class="board__inner__body__main full">
+                    <div class="board__inner__body__main__content">
+                        <div class="board__inner__body__main__content__settings justify-content-between">
+                            <div class="d-flex">
+                                <a class="board__inner__body__main__content__settings__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="26.438" height="26.438"
+                                         viewBox="0 0 26.438 26.438">
+                                        <path id="Icon_awesome-clock" data-name="Icon awesome-clock"
+                                              d="M13.781.563A13.219,13.219,0,1,0,27,13.781,13.216,13.216,0,0,0,13.781.563Zm3.044,18.661-4.7-3.417a.644.644,0,0,1-.261-.517V6.319a.641.641,0,0,1,.64-.64H15.06a.641.641,0,0,1,.64.64v7.34l3.385,2.463a.639.639,0,0,1,.139.9l-1.5,2.068A.644.644,0,0,1,16.825,19.223Z"
+                                              transform="translate(-0.563 -0.563)" fill="#fff"/>
+                                    </svg>
+
+                                    <span>ساعت های کاری</span>
+                                </a>
+                                <a class="board__inner__body__main__content__settings__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="27.563" height="27.563"
+                                         viewBox="0 0 27.563 27.563">
+                                        <path id="Icon_awesome-phone-alt" data-name="Icon awesome-phone-alt"
+                                              d="M26.777,19.477l-6.029-2.584a1.292,1.292,0,0,0-1.507.371l-2.67,3.262a19.954,19.954,0,0,1-9.539-9.539l3.262-2.67a1.289,1.289,0,0,0,.371-1.507L8.081.781A1.3,1.3,0,0,0,6.6.033L1,1.325A1.292,1.292,0,0,0,0,2.584,24.976,24.976,0,0,0,24.979,27.563a1.292,1.292,0,0,0,1.26-1l1.292-5.6A1.308,1.308,0,0,0,26.777,19.477Z"
+                                              transform="translate(0 0)" fill="#fff"/>
+                                    </svg>
+
+
+                                    <span>اطلاعات تماس</span>
+                                </a>
                             </div>
-
-                            <div class="col-4 text-sm-right text-center layout-spacing align-self-center">
-                                <select name="active_doctor" id="active_doctor" class="form-control">
+                            <div>
+                                <select name="active_doctor" id="active_doctor" class="select-css mt-4">
                                     {% for d in assistantDoctors %}
                                         <option value="{{ d.id }}">{{ d.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
+
+
                         </div>
-                    </div>
-
-                    <div class="row">
-
-                        <div class="widget-content widget-content-area rounded-pills-icon" style="width: 100%">
-                            <ul class="nav nav-pills mb-4 mt-3  justify-content-center" id="rounded-pills-icon-tab"
-                                role="tablist">
-                                <li class="nav-item ml-2 mr-2">
-                                    <a class="nav-link mb-2 active text-center" id="rounded-pills-icon-contact-tab"
-                                       data-toggle="pill" href="#rounded-pills-icon-contact" role="tab"
-                                       aria-controls="rounded-pills-icon-contact" aria-selected="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-phone">
-                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                        </svg>
-                                        تماس</a>
-                                </li>
-
-                                <li class="nav-item ml-2 mr-2">
-                                    <a class="nav-link mb-2 text-center" id="rounded-pills-icon-settings-tab"
-                                       data-toggle="pill" href="#rounded-pills-icon-settings" role="tab"
-                                       aria-controls="rounded-pills-icon-settings" aria-selected="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-settings">
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                                        </svg>
-                                        ساعت</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="rounded-pills-icon-tabContent">
-                                <div class="tab-pane show active" id="rounded-pills-icon-contact" role="tabpanel"
-                                     aria-labelledby="rounded-pills-icon-contact-tab">
-                                    <form action="{{ path('dashboard.settings.doctor') }}" method="post">
-
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <label for="name">نام</label>
-                                                <input class="form-control" type="text" name="name" id="name" value="{{ contact.name }}">
-                                            </div>
-                                            <div class="col-3">
-                                                <label for="title">تیتر</label>
-                                                <input class="form-control" type="text" name="title" id="title" value="{{ contact.title }}">
-                                            </div>
-                                            <div class="col-3">
-                                                <label for="telegram">تلگرام</label>
-                                                <input class="form-control" type="text" name="telegram" id="telegram" value="{{ contact.telegram }}">
-                                            </div>
-                                            <div class="col-3">
-                                                <label for="whatsapp">واتس‌اپ</label>
-                                                <input class="form-control" type="text" name="whatsapp" id="whatsapp" value="{{ contact.whatsapp }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mt-2">
-                                            <div class="col-lg-4 col-md-12">
-                                                <label for="waze">waze</label>
-                                                <input class="form-control" type="text" name="waze" id="waze" value="{{ contact.waze }}">
-                                            </div>
-                                            <div class="col-lg-4 col-md-12">
-                                                <label for="google_map">google map</label>
-                                                <input class="form-control" type="text" name="google_map" id="google_map" value="{{ contact.google_map }}">
-                                            </div>
-                                            <div class="col-lg-4 col-md-12">
-                                                <label for="link">لینک رزرو انلاین</label>
-                                                <input class="form-control" type="text" name="link" id="link" value="{{ contact.link }}" disabled>
-                                            </div>
-                                        </div>
-
-                                        <input type="hidden" name="doctor" value="{{ active_doctor }}">
-                                        <input type="hidden" name="is_doctor_contact" value="1">
-                                        <div class="row mt-4">
-                                            <button class="btn btn-primary w-100" type="submit">ثبت</button>
-                                        </div>
-                                    </form>
+                        <div class="board__inner__body__main__content__clock pt-2">
+                            {% for time in times %}
+                                <div class="board__inner__body__main__content__clock__item d-flex">
+                                    <div class="col-2 --start">
+                                <span>
+                                    {% if time.day == 1 %}
+                                        شنبه
+                                    {% elseif time.day == 2 %}
+                                        یکشنبه
+                                    {% elseif time.day == 3 %}
+                                        دوشنبه
+                                    {% elseif time.day == 4 %}
+                                        سه‌شنبه
+                                    {% elseif time.day == 5 %}
+                                        چهارشنبه
+                                    {% elseif time.day == 6 %}
+                                        پنجشنبه
+                                    {% else %}
+                                        جمعه
+                                    {% endif %}
+                                </span>
+                                    </div>
+                                    <div class="col-5 --middle">
+                                        <input type="text" placeholder="از ساعت"
+                                               name="day[{{ time.id }}][from_time]"
+                                               value="{{ time.from_time }}">
+                                    </div>
+                                    <div class="col-5 --end">
+                                        <input type="text" placeholder="از ساعت"
+                                               name="day[{{ time.id }}][to_time]"
+                                               value="{{ time.to_time }}">
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade" id="rounded-pills-icon-settings" role="tabpanel"
-                                     aria-labelledby="rounded-pills-icon-settings-tab">
-                                    <form action="{{ path('dashboard.settings.doctor') }}" method="post">
-                                        {% for time in times %}
-                                            <div class="form-row mb-2">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                    <span class="input-group-text">
-                                                        {% if time.day == 1 %}
-                                                            {# {% trans %}globe.appointment.days.saturday{% endtrans %} #}
-                                                            شنبه
-                                                        {% elseif time.day == 2 %}
-                                                            {# {% trans %}globe.appointment.days.sunday{% endtrans %} #}
-                                                            یکشنبه
-                                                        {% elseif time.day == 3 %}
-                                                            {# {% trans %}globe.appointment.days.monday{% endtrans %} #}
-                                                            دوشنبه
-                                                        {% elseif time.day == 4 %}
-                                                            {# {% trans %}globe.appointment.days.tuesday{% endtrans %} #}
-                                                            سه‌شنبه
-                                                        {% elseif time.day == 5 %}
-                                                            {# {% trans %}globe.appointment.days.wednesday{% endtrans %} #}
-                                                            چهارشنبه
-                                                        {% elseif time.day == 6 %}
-                                                            {# {% trans %}globe.appointment.days.thursday{% endtrans %} #}
-                                                            پنجشنبه
-                                                        {% else %}
-                                                            {# {% trans %}globe.appointment.days.friday{% endtrans %} #}
-                                                            جمعه
-                                                        {% endif %}
-                                                    </span>
-                                                    </div>
-                                                    <input type="text" class="form-control"
-                                                           name="day[{{ time.id }}][from_time]"
-                                                           value="{{ time.from_time }}" placeholder="از ساعت">
-                                                    <input type="text" class="form-control"
-                                                           name="day[{{ time.id }}][to_time]" value="{{ time.to_time }}"
-                                                           placeholder="تا ساعت">
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                        <input type="hidden" name="is_doctor_times" value="1">
-                                        <button type="submit"
-                                                class="btn btn-primary w-100">ثبت</button>
-                                    </form>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
+                        <button type="submit" class="board__inner__body__main__content__clock__submit">ثبت نهایی
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+
+    {# <div id="content" class="main-content"> #}
+    {# <div class="layout-px-spacing"> #}
+    {# <div class="row layout-spacing layout-top-spacing" id="cancel-row"> #}
+    {# <div class="col-lg-12"> #}
+    {# <div class="widget-content searchable-container list"> #}
+
+    {# <div class="row"> #}
+    {# <div class="col-8 filtered-list-search layout-spacing align-self-center"> #}
+    {# <div> #}
+    {# <h4>تنظیمات</h4> #}
+    {# </div> #}
+    {# </div> #}
+
+    {# <div class="col-4 text-sm-right text-center layout-spacing align-self-center"> #}
+    {# <select name="active_doctor" id="active_doctor" class="form-control"> #}
+    {# {% for d in assistantDoctors %} #}
+    {# <option value="{{ d.id }}">{{ d.name }}</option> #}
+    {# {% endfor %} #}
+    {# </select> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+
+    {# <div class="row"> #}
+
+    {# <div class="widget-content widget-content-area rounded-pills-icon" style="width: 100%"> #}
+    {# <ul class="nav nav-pills mb-4 mt-3  justify-content-center" id="rounded-pills-icon-tab" #}
+    {# role="tablist"> #}
+    {# <li class="nav-item ml-2 mr-2"> #}
+    {# <a class="nav-link mb-2 active text-center" id="rounded-pills-icon-contact-tab" #}
+    {# data-toggle="pill" href="#rounded-pills-icon-contact" role="tab" #}
+    {# aria-controls="rounded-pills-icon-contact" aria-selected="false"> #}
+    {# <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" #}
+    {# viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" #}
+    {# stroke-linecap="round" stroke-linejoin="round" #}
+    {# class="feather feather-phone"> #}
+    {# <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> #}
+    {# </svg> #}
+    {# تماس</a> #}
+    {# </li> #}
+
+    {# <li class="nav-item ml-2 mr-2"> #}
+    {# <a class="nav-link mb-2 text-center" id="rounded-pills-icon-settings-tab" #}
+    {# data-toggle="pill" href="#rounded-pills-icon-settings" role="tab" #}
+    {# aria-controls="rounded-pills-icon-settings" aria-selected="false"> #}
+    {# <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" #}
+    {# viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" #}
+    {# stroke-linecap="round" stroke-linejoin="round" #}
+    {# class="feather feather-settings"> #}
+    {# <circle cx="12" cy="12" r="3"></circle> #}
+    {# <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path> #}
+    {# </svg> #}
+    {# ساعت</a> #}
+    {# </li> #}
+    {# </ul> #}
+    {# <div class="tab-content" id="rounded-pills-icon-tabContent"> #}
+    {# <div class="tab-pane show active" id="rounded-pills-icon-contact" role="tabpanel" #}
+    {# aria-labelledby="rounded-pills-icon-contact-tab"> #}
+    {# <form action="{{ path('dashboard.settings.doctor') }}" method="post"> #}
+
+    {# <div class="row"> #}
+    {# <div class="col-3"> #}
+    {# <label for="name">نام</label> #}
+    {# <input class="form-control" type="text" name="name" id="name" #}
+    {# value="{{ contact.name }}"> #}
+    {# </div> #}
+    {# <div class="col-3"> #}
+    {# <label for="title">تیتر</label> #}
+    {# <input class="form-control" type="text" name="title" id="title" #}
+    {# value="{{ contact.title }}"> #}
+    {# </div> #}
+    {# <div class="col-3"> #}
+    {# <label for="telegram">تلگرام</label> #}
+    {# <input class="form-control" type="text" name="telegram" id="telegram" #}
+    {# value="{{ contact.telegram }}"> #}
+    {# </div> #}
+    {# <div class="col-3"> #}
+    {# <label for="whatsapp">واتس‌اپ</label> #}
+    {# <input class="form-control" type="text" name="whatsapp" id="whatsapp" #}
+    {# value="{{ contact.whatsapp }}"> #}
+    {# </div> #}
+    {# </div> #}
+
+    {# <div class="row mt-2"> #}
+    {# <div class="col-lg-4 col-md-12"> #}
+    {# <label for="waze">waze</label> #}
+    {# <input class="form-control" type="text" name="waze" id="waze" #}
+    {# value="{{ contact.waze }}"> #}
+    {# </div> #}
+    {# <div class="col-lg-4 col-md-12"> #}
+    {# <label for="google_map">google map</label> #}
+    {# <input class="form-control" type="text" name="google_map" #}
+    {# id="google_map" value="{{ contact.google_map }}"> #}
+    {# </div> #}
+    {# <div class="col-lg-4 col-md-12"> #}
+    {# <label for="link">لینک رزرو انلاین</label> #}
+    {# <input class="form-control" type="text" name="link" id="link" #}
+    {# value="{{ contact.link }}" disabled> #}
+    {# </div> #}
+    {# </div> #}
+
+    {# <input type="hidden" name="doctor" value="{{ active_doctor }}"> #}
+    {# <input type="hidden" name="is_doctor_contact" value="1"> #}
+    {# <div class="row mt-4"> #}
+    {# <button class="btn btn-primary w-100" type="submit">ثبت</button> #}
+    {# </div> #}
+    {# </form> #}
+    {# </div> #}
+    {# <div class="tab-pane fade" id="rounded-pills-icon-settings" role="tabpanel" #}
+    {# aria-labelledby="rounded-pills-icon-settings-tab"> #}
+    {# <form action="{{ path('dashboard.settings.doctor') }}" method="post"> #}
+    {# {% for time in times %} #}
+    {# <div class="form-row mb-2"> #}
+    {# <div class="input-group"> #}
+    {# <div class="input-group-prepend"> #}
+    {# <span class="input-group-text"> #}
+    {# {% if time.day == 1 %} #}
+    {# {% trans %}globe.appointment.days.saturday{% endtrans %} #}
+    {# شنبه #}
+    {# {% elseif time.day == 2 %} #}
+    {# {% trans %}globe.appointment.days.sunday{% endtrans %} #}
+    {# یکشنبه #}
+    {# {% elseif time.day == 3 %} #}
+    {# {% trans %}globe.appointment.days.monday{% endtrans %} #}
+    {# دوشنبه #}
+    {# {% elseif time.day == 4 %} #}
+    {# {% trans %}globe.appointment.days.tuesday{% endtrans %} #}
+    {# سه‌شنبه #}
+    {# {% elseif time.day == 5 %} #}
+    {# {% trans %}globe.appointment.days.wednesday{% endtrans %} #}
+    {# چهارشنبه #}
+    {# {% elseif time.day == 6 %} #}
+    {# {% trans %}globe.appointment.days.thursday{% endtrans %} #}
+    {# پنجشنبه #}
+    {# {% else %} #}
+    {# {% trans %}globe.appointment.days.friday{% endtrans %} #}
+    {# جمعه #}
+    {# {% endif %} #}
+    {# </span> #}
+    {# </div> #}
+    {# <input type="text" class="form-control" #}
+    {# name="day[{{ time.id }}][from_time]" #}
+    {# value="{{ time.from_time }}" placeholder="از ساعت"> #}
+    {# <input type="text" class="form-control" #}
+    {# name="day[{{ time.id }}][to_time]" value="{{ time.to_time }}" #}
+    {# placeholder="تا ساعت"> #}
+    {# </div> #}
+    {# </div> #}
+    {# {% endfor %} #}
+    {# <input type="hidden" name="is_doctor_times" value="1"> #}
+    {# <button type="submit" #}
+    {# class="btn btn-primary w-100">ثبت #}
+    {# </button> #}
+    {# </form> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
 {% endblock %}
 
 {% block js %}
